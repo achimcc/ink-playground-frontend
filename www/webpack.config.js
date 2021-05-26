@@ -5,7 +5,7 @@ module.exports = {
   mode: "development",
   entry: {
     app: "./index.ts",
-    ra: "./ra-worker.js",
+    ra: "./ra-worker.ts",
     "editor.worker": "monaco-editor/esm/vs/editor/editor.worker.js",
   },
   module: {

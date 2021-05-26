@@ -52,7 +52,7 @@ import "monaco-editor/esm/vs/editor/standalone/browser/referenceSearch/standalon
 import "monaco-editor/esm/vs/editor/standalone/browser/toggleHighContrast/toggleHighContrast";
 
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
-// import * as rustConf from "monaco-editor/esm/vs/basic-languages/rust/rust";
+import * as rustConf from "monaco-editor/esm/vs/basic-languages/rust/rust";
 import exampleCode from "./example-code";
 import encoding from "text-encoding";
 
@@ -65,8 +65,8 @@ if (typeof TextEncoder === "undefined") {
 import "./index.css";
 import { WorldState } from "../pkg/wasm_demo";
 
-var state: WorldState | undefined;
-var allTokens;
+var state: WorldState;
+var allTokens: any[];
 
 (window as any).MonacoEnvironment = {
   getWorkerUrl: () => "./editor.worker.bundle.js",
@@ -81,7 +81,7 @@ monaco.languages.register({
   // language for hover info
   id: "rust",
 });
-/*
+
 monaco.languages.onLanguage(modeId, async () => {
   console.log(modeId);
 
@@ -95,13 +95,13 @@ monaco.languages.onLanguage(modeId, async () => {
   monaco.languages.registerCodeLensProvider(modeId, {
     async provideCodeLenses(m) {
       const code_lenses = await state.code_lenses();
-      const lenses = code_lenses.map(({ range, command }) => {
+      const lenses = code_lenses.map(({ range, command }: any) => {
         const position = {
           column: range.startColumn,
           lineNumber: range.startLineNumber,
         };
 
-        const references = command.positions.map((pos) => ({
+        const references = command.positions.map((pos: any) => ({
           range: pos,
           uri: m.uri,
         }));
@@ -126,7 +126,7 @@ monaco.languages.onLanguage(modeId, async () => {
         includeDeclaration
       );
       if (references) {
-        return references.map(({ range }) => ({ uri: m.uri, range }));
+        return references.map(({ range }: any) => ({ uri: m.uri, range }));
       }
     },
   });
@@ -135,6 +135,7 @@ monaco.languages.onLanguage(modeId, async () => {
       return await state.references(pos.lineNumber, pos.column, true);
     },
   });
+  /*
   monaco.languages.registerRenameProvider(modeId, {
     async provideRenameEdits(m, pos, newName) {
       const edits = await state.rename(pos.lineNumber, pos.column, newName);
@@ -153,6 +154,7 @@ monaco.languages.onLanguage(modeId, async () => {
       return state.prepare_rename(pos.lineNumber, pos.column);
     },
   });
+  */
   monaco.languages.registerCompletionItemProvider(modeId, {
     triggerCharacters: [".", ":", "="],
     async provideCompletionItems(_m, pos) {
@@ -177,7 +179,7 @@ monaco.languages.onLanguage(modeId, async () => {
     async provideDefinition(m, pos) {
       const list = await state.definition(pos.lineNumber, pos.column);
       if (list) {
-        return list.map((def) => ({ ...def, uri: m.uri }));
+        return list.map((def: any) => ({ ...def, uri: m.uri }));
       }
     },
   });
@@ -185,7 +187,7 @@ monaco.languages.onLanguage(modeId, async () => {
     async provideTypeDefinition(m, pos) {
       const list = await state.type_definition(pos.lineNumber, pos.column);
       if (list) {
-        return list.map((def) => ({ ...def, uri: m.uri }));
+        return list.map((def: any) => ({ ...def, uri: m.uri }));
       }
     },
   });
@@ -193,7 +195,7 @@ monaco.languages.onLanguage(modeId, async () => {
     async provideImplementation(m, pos) {
       const list = await state.goto_implementation(pos.lineNumber, pos.column);
       if (list) {
-        return list.map((def) => ({ ...def, uri: m.uri }));
+        return list.map((def: any) => ({ ...def, uri: m.uri }));
       }
     },
   });
@@ -215,7 +217,9 @@ monaco.languages.onLanguage(modeId, async () => {
   });
 
   class TokenState {
-    constructor(line = 0) {
+    line: number;
+    equals: (other?: any) => boolean;
+    constructor(line: number = 0) {
       this.line = line;
       this.equals = () => true;
     }
@@ -227,7 +231,7 @@ monaco.languages.onLanguage(modeId, async () => {
     }
   }
 
-  function fixTag(tag) {
+  function fixTag(tag: string) {
     switch (tag) {
       case "builtin":
         return "variable.predefined";
@@ -244,7 +248,7 @@ monaco.languages.onLanguage(modeId, async () => {
 
   monaco.languages.setTokensProvider(modeId, {
     getInitialState: () => new TokenState(),
-    tokenize(_, st) {
+    tokenize(_, st: TokenState) {
       const filteredTokens = allTokens.filter(
         (token) => token.range.startLineNumber === st.line
       );
@@ -263,11 +267,9 @@ monaco.languages.onLanguage(modeId, async () => {
   });
 });
 
-*/
-
 // Create an RA Web worker
 const createRA = async () => {
-  const worker = new Worker(new URL("./ra-worker.js", import.meta.url));
+  const worker = new Worker(new URL("./ra-worker.ts", import.meta.url));
   const pendingResolve: { [index: string]: any } = {};
 
   let id = 1;
