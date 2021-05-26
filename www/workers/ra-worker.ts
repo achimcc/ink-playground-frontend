@@ -1,4 +1,4 @@
-import init, { initThreadPool, WorldState } from "../pkg/wasm_demo";
+import init, { initThreadPool, WorldState } from "../../pkg/wasm_demo";
 
 const start = async () => {
   await init();

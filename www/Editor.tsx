@@ -271,7 +271,7 @@ monaco.languages.onLanguage(modeId, async () => {
 
 // Create an RA Web worker
 const createRA = async () => {
-  const worker = new Worker(new URL("./ra-worker.ts", import.meta.url));
+  const worker = new Worker(new URL("./workers/ra-worker.ts", import.meta.url));
   const pendingResolve: { [index: string]: any } = {};
 
   let id = 1;

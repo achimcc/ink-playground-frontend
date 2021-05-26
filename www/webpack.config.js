@@ -5,7 +5,7 @@ module.exports = {
   mode: "development",
   entry: {
     app: "./index.tsx",
-    ra: "./ra-worker.ts",
+    ra: "./workers/ra-worker.ts",
     "editor.worker": "monaco-editor/esm/vs/editor/editor.worker.js",
   },
   module: {
@@ -21,7 +21,7 @@ module.exports = {
       {
         test: /\.tsx?$/,
         use: "ts-loader",
-        exclude: /node_modules/,
+        exclude: ["/node_modules/", "/workers"],
       },
       // Handle our worker
     ],
