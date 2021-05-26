@@ -397,7 +397,11 @@ const Editor: React.FC<Props> = ({
     <div
       id="test"
       ref={assignRef}
-      style={{ height: `${height}vh`, width: `${width}vw` }}
+      style={{
+        height: `${height}vh`,
+        width: `${width}vw`,
+        border: "1px solid black",
+      }}
     ></div>
   );
 };

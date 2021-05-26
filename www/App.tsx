@@ -16,7 +16,14 @@ function App() {
       <div
         style={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}
       >
-        <div style={{ margin: "2em", textAlign: "center", width: "50vw" }}>
+        <div
+          style={{
+            margin: "2em",
+            width: "50vw",
+            display: "flex",
+            justifyContent: "space-around",
+          }}
+        >
           <button onClick={toggleDark}>Toggle Dark Mode</button>
           <button onClick={toggleMinimap}>Toggle Minimap</button>
           <button onClick={toggleNumbering}>Toggle Numbering</button>
