@@ -64,7 +64,7 @@ if (typeof TextEncoder === "undefined") {
 
 import "./index.css";
 import { WorldState } from "../pkg/wasm_demo";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import React from "react";
 
 var state: WorldState;
@@ -320,7 +320,8 @@ const createRA = async () => {
 const start = async (
   domElement: HTMLElement,
   numbering: boolean,
-  useMinimap: boolean = false
+  useMinimap: boolean = false,
+  isDark: boolean
 ) => {
   var loadingText = document.createTextNode("Loading wasm...");
   domElement.appendChild(loadingText);
@@ -339,13 +340,14 @@ const start = async (
   domElement.removeChild(loadingText);
 
   const myEditor = monaco.editor.create(domElement, {
-    theme: "vs-dark",
+    theme: isDark ? "vs-dark" : "vs",
     minimap: { enabled: useMinimap },
     lineNumbers: numbering ? "on" : "off",
     model: model,
   });
 
   window.onresize = () => myEditor.layout();
+  return myEditor;
 };
 
 interface Props {
@@ -353,6 +355,7 @@ interface Props {
   height: number;
   minimap?: boolean;
   numbering?: boolean;
+  isDark?: boolean;
 }
 
 const Editor: React.FC<Props> = ({
@@ -360,6 +363,7 @@ const Editor: React.FC<Props> = ({
   height,
   minimap = false,
   numbering = false,
+  isDark = true,
 }: Props) => {
   let divNode: any;
   const assignRef = useCallback((node) => {
@@ -367,11 +371,27 @@ const Editor: React.FC<Props> = ({
     divNode = node;
   }, []);
 
+  const editor = useRef<monaco.editor.IStandaloneCodeEditor>();
+
   useEffect(() => {
     if (divNode) {
-      start(divNode, numbering, minimap);
+      start(divNode, numbering, minimap, isDark).then(
+        (m) => (editor.current = m)
+      );
     }
   }, [assignRef]);
+
+  useEffect(() => {
+    editor.current?.updateOptions({ theme: isDark ? "vs-dark" : "vs" });
+  }, [isDark, editor]);
+
+  useEffect(() => {
+    editor.current?.updateOptions({ minimap: { enabled: minimap } });
+  }, [minimap, editor]);
+
+  useEffect(() => {
+    editor.current?.updateOptions({ lineNumbers: numbering ? "on" : "off" });
+  }, [numbering, editor]);
 
   return (
     <div
