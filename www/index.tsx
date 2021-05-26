@@ -1,11 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "./index.css";
-import App from "./App";
+import Editor from "./Editor";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Editor width={50} height={50} />
   </React.StrictMode>,
-  document.body.appendChild(document.createElement("div"))
+  document.getElementById("root")
 );

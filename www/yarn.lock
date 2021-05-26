@@ -1961,32 +1961,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@monaco-editor/loader@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "@monaco-editor/loader@npm:1.0.1"
-  dependencies:
-    state-local: ^1.0.6
-  peerDependencies:
-    monaco-editor: ">= 0.21.0 < 1"
-  checksum: 7d0b7d52de79c00a57911f2ab088c79f72674f891395ef26869a4a22862166328f5251198777c4d0473826071b75133565d7e013fff21e35f1153b40cad3a71d
-  languageName: node
-  linkType: hard
-
-"@monaco-editor/react@npm:^4.1.3":
-  version: 4.1.3
-  resolution: "@monaco-editor/react@npm:4.1.3"
-  dependencies:
-    "@monaco-editor/loader": ^1.0.1
-    prop-types: ^15.7.2
-    state-local: ^1.0.7
-  peerDependencies:
-    monaco-editor: ^0.23.0
-    react: ^16.8.0 || ^17.0.0
-    react-dom: ^16.8.0 || ^17.0.0
-  checksum: 20222367b6df898a904602855aa160f4bce8f9927a4fe22f3e4dce3a44fc699a6604ce106377ff81bbd008263e21d5772f19c3388cd8ba6fb785ebfda4c1b2d5
-  languageName: node
-  linkType: hard
-
 "@nodelib/fs.scandir@npm:2.1.4":
   version: 2.1.4
   resolution: "@nodelib/fs.scandir@npm:2.1.4"
@@ -11601,7 +11575,6 @@ fsevents@^2.1.2:
   resolution: "ra-wasm-demo@workspace:."
   dependencies:
     "@babel/core": 7.12.3
-    "@monaco-editor/react": ^4.1.3
     "@pmmmwh/react-refresh-webpack-plugin": 0.4.3
     "@svgr/webpack": 5.5.0
     "@testing-library/jest-dom": ^5.11.4
@@ -13120,13 +13093,6 @@ resolve@^2.0.0-next.3:
   version: 1.2.0
   resolution: "stackframe@npm:1.2.0"
   checksum: 71e2868a529123e9ca1cf510192a7de879b8d92b5829c7f58d5576e1500cbedf22b5d9cc86589c547b6842abcf01cea13979ab8301b51e85bdb6267a6f9288f2
-  languageName: node
-  linkType: hard
-
-"state-local@npm:^1.0.6, state-local@npm:^1.0.7":
-  version: 1.0.7
-  resolution: "state-local@npm:1.0.7"
-  checksum: e272ccbedabead16ac7dce577bb68fec512e5cf8c9474cecc9f2e3afd759b45ac3bf949deaa53825e987de8b9d585d7fa7c70c092195f8fa963f75f53efd9897
   languageName: node
   linkType: hard
 

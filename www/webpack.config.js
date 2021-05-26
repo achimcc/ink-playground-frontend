@@ -4,7 +4,7 @@ const HtmlWebPackPlugin = require("html-webpack-plugin");
 module.exports = {
   mode: "development",
   entry: {
-    app: "./index.ts",
+    app: "./index.tsx",
     ra: "./ra-worker.ts",
     "editor.worker": "monaco-editor/esm/vs/editor/editor.worker.js",
   },
@@ -37,7 +37,7 @@ module.exports = {
   plugins: [
     new HtmlWebPackPlugin({
       title: "Rust Analyzer",
-      chunks: ["app"],
+      template: "./index.html",
     }),
   ],
   // It is needed for firefox works
