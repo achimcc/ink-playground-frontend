@@ -317,7 +317,11 @@ const createRA = async () => {
   });
 };
 
-const start = async (domElement: HTMLElement) => {
+const start = async (
+  domElement: HTMLElement,
+  numbering: boolean,
+  useMinimap: boolean = false
+) => {
   var loadingText = document.createTextNode("Loading wasm...");
   domElement.appendChild(loadingText);
 
@@ -336,8 +340,8 @@ const start = async (domElement: HTMLElement) => {
 
   const myEditor = monaco.editor.create(domElement, {
     theme: "vs-dark",
-    minimap: { enabled: false },
-    lineNumbers: "off",
+    minimap: { enabled: useMinimap },
+    lineNumbers: numbering ? "on" : "off",
     model: model,
   });
 
@@ -347,9 +351,16 @@ const start = async (domElement: HTMLElement) => {
 interface Props {
   width: number;
   height: number;
+  minimap?: boolean;
+  numbering?: boolean;
 }
 
-const Editor: React.FC<Props> = ({ width, height }: Props) => {
+const Editor: React.FC<Props> = ({
+  width,
+  height,
+  minimap = false,
+  numbering = false,
+}: Props) => {
   let divNode: any;
   const assignRef = useCallback((node) => {
     // On mount get the ref of the div and assign it the divNode
@@ -358,7 +369,7 @@ const Editor: React.FC<Props> = ({ width, height }: Props) => {
 
   useEffect(() => {
     if (divNode) {
-      start(divNode);
+      start(divNode, numbering, minimap);
     }
   }, [assignRef]);
 
