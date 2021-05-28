@@ -9,10 +9,9 @@ const start = async () => {
   type Which = keyof WorldState;
 
   const state = new WorldState();
-  console.log("*** start!");
   onmessage = (e) => {
-    console.log("***message! ", e);
     const { which, args, id } = e.data;
+    if (id === "ra-worker-ready" || !which) return;
     const result = (state[which as Which] as any)(...args);
     postMessage({
       id: id,
