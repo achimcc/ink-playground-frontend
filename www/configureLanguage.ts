@@ -61,16 +61,16 @@ export const configureLanguage =
         return await state.references(pos.lineNumber, pos.column, true);
       },
     });
-    /*
+
     monaco.languages.registerRenameProvider(modeId, {
       async provideRenameEdits(m, pos, newName) {
-        const edits = await state.rename(pos.lineNumber, pos.column, newName);
-        if (edits) {
+        const edit = await state.rename(pos.lineNumber, pos.column, newName);
+        if (edit) {
           return {
             edits: [
               {
                 resource: m.uri,
-                edits,
+                edit,
               },
             ],
           };
@@ -80,7 +80,7 @@ export const configureLanguage =
         return state.prepare_rename(pos.lineNumber, pos.column);
       },
     });
-    */
+
     monaco.languages.registerCompletionItemProvider(modeId, {
       triggerCharacters: [".", ":", "="],
       async provideCompletionItems(_m, pos) {
