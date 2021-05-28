@@ -31,7 +31,16 @@ module.exports = {
   },
   output: {
     globalObject: "self",
-    filename: "[name].bundle.js",
+    filename: (chunkData) => {
+      switch (chunkData.chunk.name) {
+        case "editor.worker":
+          return "editor.worker.js";
+        case "ra":
+          return "ra-worker.ts";
+        default:
+          return "bundle.[hash].js";
+      }
+    },
     path: path.resolve(__dirname, "dist"),
   },
   plugins: [
