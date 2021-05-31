@@ -95,15 +95,13 @@ const start = async (
 
   const allTokens: Array<any> = [];
 
-  monaco.languages.onLanguage(
-    modeId,
-    configureLanguage(monaco, state, allTokens)
-  );
+  monaco.languages.onLanguage(modeId, configureLanguage(state, allTokens));
 
   let model = monaco.editor.createModel(exampleCode, modeId);
 
   async function update() {
     const res = await state.update(model.getValue());
+    console.log("res: ", res);
     monaco.editor.setModelMarkers(model, modeId, res.diagnostics);
     allTokens.push(...res.highlights);
   }

@@ -12,6 +12,7 @@ const start = async () => {
   onmessage = (e) => {
     const { which, args, id } = e.data;
     if (id === "ra-worker-ready" || !which) return;
+    console.log("message: ", e.data);
     const result = (state[which as Which] as any)(...args);
     postMessage({
       id: id,

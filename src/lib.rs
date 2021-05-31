@@ -1,12 +1,15 @@
 #![cfg(target_arch = "wasm32")]
 #![allow(non_snake_case)]
 
-use ide::{Analysis, CompletionConfig, DiagnosticsConfig, FileId, FilePosition, Indel, TextSize};
+use ide::{Analysis, AnalysisHost, Change, CompletionConfig, CrateGraph, Edition, DiagnosticsConfig, FileId, FilePosition, Indel, TextSize};
 use ide_db::helpers::{
     insert_use::{InsertUseConfig, MergeBehavior, PrefixKind},
-    SnippetCap,
+    SnippetCap, 
 };
+use base_db::{Env};
+use cfg::{CfgOptions};
 use wasm_bindgen::prelude::*;
+use std::sync::Arc;
 
 mod to_proto;
 
@@ -14,6 +17,7 @@ mod return_types;
 use return_types::*;
 
 pub use wasm_bindgen_rayon::init_thread_pool;
+
 
 #[wasm_bindgen(start)]
 pub fn start() {
@@ -27,6 +31,7 @@ pub fn start() {
 #[wasm_bindgen]
 pub struct WorldState {
     analysis: Analysis,
+    analysisHost: AnalysisHost,
     file_id: FileId,
 }
 
@@ -35,14 +40,19 @@ impl WorldState {
     #[wasm_bindgen(constructor)]
     pub fn new() -> Self {
         let (analysis, file_id) = Analysis::from_single_file("".to_owned());
-        Self { analysis, file_id }
+        let analysisHost = AnalysisHost::new(None);
+        Self { analysis, file_id, analysisHost }
     }
 
     pub fn update(&mut self, code: String) -> JsValue {
         log::warn!("update");
-        let (analysis, file_id) = Analysis::from_single_file(code);
-        self.analysis = analysis;
-        self.file_id = file_id;
+       // let (analysis, file_id) = Analysis::from_single_file(code);
+        let mut change = Change::new();
+        change.change_file(FileId(1), Some(Arc::new(code)));
+        AnalysisHost::apply_change(&mut self.analysisHost, change);
+        self.analysis=AnalysisHost::analysis(&self.analysisHost);
+        let file_id = FileId(1);
+        self.file_id = FileId(1);
 
         let line_index = self.analysis.file_line_index(self.file_id).unwrap();
 
@@ -79,6 +89,17 @@ impl WorldState {
             .collect();
 
         serde_wasm_bindgen::to_value(&UpdateResult { diagnostics, highlights }).unwrap()
+    }
+
+    pub fn change(&mut self, code: String) -> JsValue {
+        let mut change = Change::new();
+        let mut crate_graph = CrateGraph::default();
+        let file_id = FileId(1);
+        crate_graph.add_crate_root(file_id, Edition::Edition2021, None, CfgOptions::default(), Env::default(), Vec::new());
+        change.change_file(FileId(1), Some(Arc::new("".to_string())));
+        AnalysisHost::apply_change(&mut self.analysisHost, change);
+        self.analysis=AnalysisHost::analysis(&self.analysisHost);
+        serde_wasm_bindgen::to_value(&{}).unwrap()
     }
 
     pub fn completions(&self, line_number: u32, column: u32) -> JsValue {

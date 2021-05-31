@@ -11,6 +11,7 @@ export const createRa = async (): Promise<WorldState> => {
   const callWorker = async (which: any, ...args: any[]) => {
     return new Promise((resolve, _) => {
       pendingResolve[id] = resolve;
+      console.log("resolve: ", resolve);
       worker.postMessage({
         which: which,
         args: args,

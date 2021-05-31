@@ -8,7 +8,7 @@ type Monaco = typeof monaco;
 const modeId = "ra-rust";
 
 export const configureLanguage =
-  (monaco: Monaco, state: WorldState, allTokens: any[]) => async () => {
+  (state: WorldState, allTokens: any[]) => async () => {
     console.log(modeId);
 
     monaco.languages.setLanguageConfiguration(modeId, rustConf.conf);

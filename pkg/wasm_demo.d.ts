@@ -25,6 +25,11 @@ export class WorldState {
 */
   update(code: string): any;
 /**
+* @param {string} code
+* @returns {any}
+*/
+  change(code: string): any;
+/**
 * @param {number} line_number
 * @param {number} column
 * @returns {any}
@@ -120,10 +125,12 @@ export class wbg_rayon_PoolBuilder {
 export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembly.Module;
 
 export interface InitOutput {
+  readonly __wasm_init_memory: () => void;
   readonly start: () => void;
   readonly __wbg_worldstate_free: (a: number) => void;
   readonly worldstate_new: () => number;
   readonly worldstate_update: (a: number, b: number, c: number) => number;
+  readonly worldstate_change: (a: number, b: number, c: number) => number;
   readonly worldstate_completions: (a: number, b: number, c: number) => number;
   readonly worldstate_hover: (a: number, b: number, c: number) => number;
   readonly worldstate_code_lenses: (a: number) => number;

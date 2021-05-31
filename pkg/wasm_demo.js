@@ -1,4 +1,4 @@
-import { startWorkers } from './snippets/wasm-bindgen-rayon-258f06ee9665d26e/src/workerHelpers.js';
+import { startWorkers } from './snippets/wasm-bindgen-rayon-7afa899f36665473/src/workerHelpers.js';
 
 let wasm;
 
@@ -176,15 +176,12 @@ export function start() {
     wasm.start();
 }
 
-function handleError(f) {
-    return function () {
-        try {
-            return f.apply(this, arguments);
-
-        } catch (e) {
-            wasm.__wbindgen_exn_store(addHeapObject(e));
-        }
-    };
+function handleError(f, args) {
+    try {
+        return f.apply(this, args);
+    } catch (e) {
+        wasm.__wbindgen_exn_store(addHeapObject(e));
+    }
 }
 /**
 * @param {number} num_threads
@@ -238,6 +235,16 @@ export class WorldState {
         var ptr0 = passStringToWasm0(code, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
         var len0 = WASM_VECTOR_LEN;
         var ret = wasm.worldstate_update(this.ptr, ptr0, len0);
+        return takeObject(ret);
+    }
+    /**
+    * @param {string} code
+    * @returns {any}
+    */
+    change(code) {
+        var ptr0 = passStringToWasm0(code, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        var len0 = WASM_VECTOR_LEN;
+        var ret = wasm.worldstate_change(this.ptr, ptr0, len0);
         return takeObject(ret);
     }
     /**
@@ -452,7 +459,7 @@ async function init(input, maybe_memory) {
         var ret = getObject(arg0) === undefined;
         return ret;
     };
-    imports.wbg.__wbg_new_68adb0d58759a4ed = function() {
+    imports.wbg.__wbg_new_e38d545834ee2e5f = function() {
         var ret = new Object();
         return addHeapObject(ret);
     };
@@ -460,37 +467,37 @@ async function init(input, maybe_memory) {
         var ret = arg0;
         return addHeapObject(ret);
     };
-    imports.wbg.__wbg_set_2e79e744454afade = function(arg0, arg1, arg2) {
+    imports.wbg.__wbg_set_327f76e14f96ef0e = function(arg0, arg1, arg2) {
         getObject(arg0)[takeObject(arg1)] = takeObject(arg2);
     };
     imports.wbg.__wbg_now_bca9396939036a34 = function(arg0) {
         var ret = getObject(arg0).now();
         return ret;
     };
-    imports.wbg.__wbg_get_4e90ba4e3de362de = handleError(function(arg0, arg1) {
+    imports.wbg.__wbg_get_4e90ba4e3de362de = function() { return handleError(function (arg0, arg1) {
         var ret = Reflect.get(getObject(arg0), getObject(arg1));
         return addHeapObject(ret);
-    });
-    imports.wbg.__wbg_call_e5847d15cc228e4f = handleError(function(arg0, arg1) {
+    }, arguments) };
+    imports.wbg.__wbg_call_e5847d15cc228e4f = function() { return handleError(function (arg0, arg1) {
         var ret = getObject(arg0).call(getObject(arg1));
         return addHeapObject(ret);
-    });
-    imports.wbg.__wbg_self_35a0fda3eb965abe = handleError(function() {
+    }, arguments) };
+    imports.wbg.__wbg_self_35a0fda3eb965abe = function() { return handleError(function () {
         var ret = self.self;
         return addHeapObject(ret);
-    });
-    imports.wbg.__wbg_window_88a6f88dd3a474f1 = handleError(function() {
+    }, arguments) };
+    imports.wbg.__wbg_window_88a6f88dd3a474f1 = function() { return handleError(function () {
         var ret = window.window;
         return addHeapObject(ret);
-    });
-    imports.wbg.__wbg_globalThis_1d843c4ad7b6a1f5 = handleError(function() {
+    }, arguments) };
+    imports.wbg.__wbg_globalThis_1d843c4ad7b6a1f5 = function() { return handleError(function () {
         var ret = globalThis.globalThis;
         return addHeapObject(ret);
-    });
-    imports.wbg.__wbg_global_294ce70448e8fbbf = handleError(function() {
+    }, arguments) };
+    imports.wbg.__wbg_global_294ce70448e8fbbf = function() { return handleError(function () {
         var ret = global.global;
         return addHeapObject(ret);
-    });
+    }, arguments) };
     imports.wbg.__wbg_newnoargs_2349ba6aefe72376 = function(arg0, arg1) {
         var ret = new Function(getStringFromWasm0(arg0, arg1));
         return addHeapObject(ret);
@@ -525,7 +532,7 @@ async function init(input, maybe_memory) {
         var ret = wasm.__wbindgen_export_0;
         return addHeapObject(ret);
     };
-    imports.wbg.__wbg_startWorkers_84755a51524a37a1 = function(arg0, arg1, arg2) {
+    imports.wbg.__wbg_startWorkers_04f63eca19916b8f = function(arg0, arg1, arg2) {
         var ret = startWorkers(takeObject(arg0), takeObject(arg1), wbg_rayon_PoolBuilder.__wrap(arg2));
         return addHeapObject(ret);
     };
