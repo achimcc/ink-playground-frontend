@@ -25,5 +25,6 @@ io-providers = "0.1.2"
 ide = { version = "0.0.45", package = "ra_ap_ide" }
 ide_db = { version = "0.0.45", package = "ra_ap_ide_db" }
 base_db = { version = "0.0.45", package = "ra_ap_base_db" }
+rust-analyzer = { version = "0.0.45", package = "ra_ap_rust-analyzer" }
 cfg = { version = "0.0.45", package = "ra_ap_cfg" }
 

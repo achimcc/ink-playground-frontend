@@ -26,9 +26,10 @@ export class WorldState {
   update(code: string): any;
 /**
 * @param {string} code
+* @param {string} cargo
 * @returns {any}
 */
-  change(code: string): any;
+  change(code: string, cargo: string): any;
 /**
 * @param {number} line_number
 * @param {number} column
@@ -130,7 +131,7 @@ export interface InitOutput {
   readonly __wbg_worldstate_free: (a: number) => void;
   readonly worldstate_new: () => number;
   readonly worldstate_update: (a: number, b: number, c: number) => number;
-  readonly worldstate_change: (a: number, b: number, c: number) => number;
+  readonly worldstate_change: (a: number, b: number, c: number, d: number, e: number) => number;
   readonly worldstate_completions: (a: number, b: number, c: number) => number;
   readonly worldstate_hover: (a: number, b: number, c: number) => number;
   readonly worldstate_code_lenses: (a: number) => number;

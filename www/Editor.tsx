@@ -53,6 +53,7 @@ import "monaco-editor/esm/vs/editor/standalone/browser/toggleHighContrast/toggle
 
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 import exampleCode from "./example-code";
+import exampleCargo from "./cargo";
 import encoding from "text-encoding";
 
 if (typeof TextEncoder === "undefined") {
@@ -118,6 +119,9 @@ const start = async (
   });
 
   window.onresize = () => myEditor.layout();
+
+  console.log("testing change!");
+  state.change(exampleCode, exampleCargo);
   return myEditor;
 };
 

@@ -1,12 +1,13 @@
 #![cfg(target_arch = "wasm32")]
 #![allow(non_snake_case)]
 
-use ide::{Analysis, AnalysisHost, Change, CompletionConfig, CrateGraph, Edition, DiagnosticsConfig, FileId, FilePosition, Indel, TextSize};
+use ide::{Analysis, AnalysisHost, Change, CompletionConfig, CrateGraph, Edition, 
+    DiagnosticsConfig, FileId, FilePosition, Indel, SourceRootId, TextSize};
 use ide_db::helpers::{
     insert_use::{InsertUseConfig, MergeBehavior, PrefixKind},
     SnippetCap, 
 };
-use base_db::{Env};
+use base_db::{Env, FileSet, VfsPath, SourceRoot, };
 use cfg::{CfgOptions};
 use wasm_bindgen::prelude::*;
 use std::sync::Arc;
@@ -40,19 +41,16 @@ impl WorldState {
     #[wasm_bindgen(constructor)]
     pub fn new() -> Self {
         let (analysis, file_id) = Analysis::from_single_file("".to_owned());
-        let analysisHost = AnalysisHost::new(None);
+        let analysisHost = AnalysisHost::default();
         Self { analysis, file_id, analysisHost }
     }
 
     pub fn update(&mut self, code: String) -> JsValue {
         log::warn!("update");
        // let (analysis, file_id) = Analysis::from_single_file(code);
-        let mut change = Change::new();
-        change.change_file(FileId(1), Some(Arc::new(code)));
-        AnalysisHost::apply_change(&mut self.analysisHost, change);
-        self.analysis=AnalysisHost::analysis(&self.analysisHost);
-        let file_id = FileId(1);
-        self.file_id = FileId(1);
+        let (analysis, file_id) = Analysis::from_single_file(code);
+        self.analysis = analysis;
+        self.file_id = file_id;
 
         let line_index = self.analysis.file_line_index(self.file_id).unwrap();
 
@@ -91,15 +89,34 @@ impl WorldState {
         serde_wasm_bindgen::to_value(&UpdateResult { diagnostics, highlights }).unwrap()
     }
 
-    pub fn change(&mut self, code: String) -> JsValue {
+    pub fn change(&mut self, code: String, cargo: String) -> JsValue {
+        let file_id = FileId(0);
+        let mut file_set = FileSet::default();
+        file_set.insert(file_id, VfsPath::new_virtual_path("/main.rs".to_string()));
+        let cargo_id = FileId(1);
+        file_set.insert(cargo_id, VfsPath::new_virtual_path("/Cargo.toml".to_string()));
+        let source_root = SourceRoot::new_local(file_set);
         let mut change = Change::new();
+        change.set_roots(vec![source_root]);
         let mut crate_graph = CrateGraph::default();
-        let file_id = FileId(1);
-        crate_graph.add_crate_root(file_id, Edition::Edition2021, None, CfgOptions::default(), Env::default(), Vec::new());
-        change.change_file(FileId(1), Some(Arc::new("".to_string())));
-        AnalysisHost::apply_change(&mut self.analysisHost, change);
-        self.analysis=AnalysisHost::analysis(&self.analysisHost);
-        serde_wasm_bindgen::to_value(&{}).unwrap()
+        // FIXME: cfg options
+        // Default to enable test for single file.
+        let mut cfg_options = CfgOptions::default();
+        cfg_options.insert_atom("test".into());
+        let crate_id = crate_graph.add_crate_root(
+            cargo_id,
+            Edition::Edition2018,
+            None,
+            cfg_options,
+            Env::default(),
+            Default::default(),
+        );
+        change.change_file(file_id, Some(Arc::new(code)));
+        change.change_file(cargo_id, Some(Arc::new(cargo)));
+        change.set_crate_graph(crate_graph);
+        self.analysisHost.apply_change(change);
+        self.analysis = self.analysisHost.analysis();
+        return JsValue::NULL;
     }
 
     pub fn completions(&self, line_number: u32, column: u32) -> JsValue {

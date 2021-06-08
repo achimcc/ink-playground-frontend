@@ -239,12 +239,15 @@ export class WorldState {
     }
     /**
     * @param {string} code
+    * @param {string} cargo
     * @returns {any}
     */
-    change(code) {
+    change(code, cargo) {
         var ptr0 = passStringToWasm0(code, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
         var len0 = WASM_VECTOR_LEN;
-        var ret = wasm.worldstate_change(this.ptr, ptr0, len0);
+        var ptr1 = passStringToWasm0(cargo, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        var len1 = WASM_VECTOR_LEN;
+        var ret = wasm.worldstate_change(this.ptr, ptr0, len0, ptr1, len1);
         return takeObject(ret);
     }
     /**
