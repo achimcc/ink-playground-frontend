@@ -173,7 +173,13 @@ function getInt32Memory0() {
 /**
 */
 export function start() {
-    wasm.start();
+    wasm.init_panic_hook();
+}
+
+/**
+*/
+export function init_panic_hook() {
+    wasm.init_panic_hook();
 }
 
 function handleError(f) {
@@ -462,6 +468,27 @@ async function init(input, maybe_memory) {
     };
     imports.wbg.__wbg_set_2e79e744454afade = function(arg0, arg1, arg2) {
         getObject(arg0)[takeObject(arg1)] = takeObject(arg2);
+    };
+    imports.wbg.__wbg_new_59cb74e423758ede = function() {
+        var ret = new Error();
+        return addHeapObject(ret);
+    };
+    imports.wbg.__wbg_stack_558ba5917b466edd = function(arg0, arg1) {
+        var ret = getObject(arg1).stack;
+        var ptr0 = passStringToWasm0(ret, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        var len0 = WASM_VECTOR_LEN;
+        getInt32Memory0()[arg0 / 4 + 1] = len0;
+        getInt32Memory0()[arg0 / 4 + 0] = ptr0;
+    };
+    imports.wbg.__wbg_error_4bb6c2a97407129a = function(arg0, arg1) {
+        try {
+            console.error(getStringFromWasm0(arg0, arg1));
+        } finally {
+            wasm.__wbindgen_free(arg0, arg1);
+        }
+    };
+    imports.wbg.__wbg_log_be5faf67a2e8b869 = function(arg0) {
+        console.log(getObject(arg0));
     };
     imports.wbg.__wbg_now_bca9396939036a34 = function(arg0) {
         var ret = getObject(arg0).now();

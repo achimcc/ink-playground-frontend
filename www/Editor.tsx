@@ -53,6 +53,7 @@ import "monaco-editor/esm/vs/editor/standalone/browser/toggleHighContrast/toggle
 
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 import exampleCode from "./example-code";
+import crate from "./crate.json";
 import encoding from "text-encoding";
 
 if (typeof TextEncoder === "undefined") {
@@ -103,7 +104,7 @@ const start = async (
   let model = monaco.editor.createModel(exampleCode, modeId);
 
   async function update() {
-    const res = await state.update(model.getValue());
+    const res = await state.update(JSON.stringify(crate));
     monaco.editor.setModelMarkers(model, modeId, res.diagnostics);
     allTokens.push(...res.highlights);
   }

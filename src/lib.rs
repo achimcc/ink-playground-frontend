@@ -1,11 +1,16 @@
 #![cfg(target_arch = "wasm32")]
 #![allow(non_snake_case)]
 
-use ide::{Analysis, CompletionConfig, DiagnosticsConfig, FileId, FilePosition, Indel, TextSize};
+use std::sync::Arc;
+
+use cfg::CfgOptions;
+
+use ide::{Analysis, AnalysisHost, CompletionConfig, DiagnosticsConfig, FileId, FilePosition, Indel, TextSize};
 use ide_db::helpers::{
     insert_use::{InsertUseConfig, MergeBehavior, PrefixKind},
-    SnippetCap,
+    SnippetCap, 
 };
+pub use ide_db::base_db::{Change, CrateGraph, CrateId, Edition, Env, FileSet, SourceRoot, VfsPath,};
 use wasm_bindgen::prelude::*;
 
 mod to_proto;
@@ -13,20 +18,59 @@ mod to_proto;
 mod return_types;
 use return_types::*;
 
+extern crate web_sys;
+
 pub use wasm_bindgen_rayon::init_thread_pool;
+
+/*
+fn get_change(text: String) -> (Change, FileId) {
+    let file_id = FileId(172);
+    let mut file_set = FileSet::default();
+    file_set.insert(file_id, VfsPath::new_virtual_path("/main.rs".to_string()));
+    let source_root = SourceRoot::new_local(file_set);
+    let mut change = Change::new();
+    change.set_roots(vec![source_root]);
+    let mut crate_graph = CrateGraph::default();
+    // FIXME: cfg options
+    // Default to enable test for single file.
+    let mut cfg_options = CfgOptions::default();
+    cfg_options.insert_atom("test".into());
+    crate_graph.add_crate_root(
+        file_id,
+        Edition::Edition2018,
+        None,
+        cfg_options,
+        Env::default(),
+        Default::default(),
+    );
+    change.change_file(file_id, Some(Arc::new(text)));
+    change.set_crate_graph(crate_graph);
+    (change, file_id)
+}
+
+pub fn from_single_file(text: String) -> (Analysis, AnalysisHost, FileId) {
+    let host = AnalysisHost::default();
+    let (change, file_id) = get_change(text);
+    host.apply_change(change);
+    (host.analysis(), host, file_id)
+}
+*/
 
 #[wasm_bindgen(start)]
 pub fn start() {
-    #[cfg(feature = "dev")]
-    {
-        console_error_panic_hook::set_once();
-    }
+    console_error_panic_hook::set_once();
     log::info!("worker initialized")
+}
+
+#[wasm_bindgen]
+pub fn init_panic_hook() {
+    console_error_panic_hook::set_once();
 }
 
 #[wasm_bindgen]
 pub struct WorldState {
     analysis: Analysis,
+    analysis_host: AnalysisHost, 
     file_id: FileId,
 }
 
@@ -34,18 +78,22 @@ pub struct WorldState {
 impl WorldState {
     #[wasm_bindgen(constructor)]
     pub fn new() -> Self {
-        let (analysis, file_id) = Analysis::from_single_file("".to_owned());
-        Self { analysis, file_id }
+        let analysis_host = AnalysisHost::default();
+        let analysis = analysis_host.analysis();
+        let file_id = FileId(0);
+        Self { analysis, analysis_host, file_id }
     }
 
     pub fn update(&mut self, code: String) -> JsValue {
         log::warn!("update");
-        let (analysis, file_id) = Analysis::from_single_file(code);
-        self.analysis = analysis;
-        self.file_id = file_id;
-
+        init_panic_hook();
+        self.file_id = FileId(172);
+        let file_id = self.file_id;
+        let change: Change = serde_json::from_str(&code).expect("`Change` deserialization must work");
+        let mut analysis_host = AnalysisHost::default();
+        analysis_host.apply_change(change);
+        self.analysis = analysis_host.analysis();
         let line_index = self.analysis.file_line_index(self.file_id).unwrap();
-
         let highlights: Vec<_> = self
             .analysis
             .highlight(file_id)
@@ -56,9 +104,7 @@ impl WorldState {
                 range: to_proto::text_range(hl.range, &line_index),
             })
             .collect();
-
         let config = DiagnosticsConfig::default();
-
         let diagnostics: Vec<_> = self
             .analysis
             .diagnostics(&config, file_id)
@@ -77,9 +123,13 @@ impl WorldState {
                 }
             })
             .collect();
-
+        web_sys::console::log_1(&"All Done!".into());  
         serde_wasm_bindgen::to_value(&UpdateResult { diagnostics, highlights }).unwrap()
     }
+
+    
+
+   
 
     pub fn completions(&self, line_number: u32, column: u32) -> JsValue {
         const COMPLETION_CONFIG: CompletionConfig = CompletionConfig {
