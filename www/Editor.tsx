@@ -66,7 +66,7 @@ import "./index.css";
 import { useCallback, useEffect, useRef } from "react";
 import React from "react";
 
-import { configureLanguage } from "./configureLanguage";
+import { configureLanguage, setTokens } from "./configureLanguage";
 import { createRa } from "./workers/createRa";
 
 (window as any).MonacoEnvironment = {
@@ -100,61 +100,9 @@ const start = async (
     modeId,
     configureLanguage(monaco, state, allTokens)
   );
-
-  class TokenState {
-    line: number;
-    equals: (other?: any) => boolean;
-    constructor(line: number = 0) {
-      this.line = line;
-      this.equals = () => true;
-    }
-
-    clone() {
-      const res = new TokenState(this.line);
-      res.line += 1;
-      return res;
-    }
-  }
-
-  function fixTag(tag: string) {
-    switch (tag) {
-      case "builtin":
-        return "variable.predefined";
-      case "attribute":
-        return "key";
-      case "macro":
-        return "number.hex";
-      case "literal":
-        return "number";
-      default:
-        return tag;
-    }
-  }
-
-  const setTokens = (allTokens: Array<any>) => monaco.languages.setTokensProvider(modeId, {
-    getInitialState: () => new TokenState(),
-    tokenize(_, st: TokenState) {
-      const filteredTokens = allTokens.filter(
-        (token) => token.range.startLineNumber === st.line
-      );
-
-      const tokens = filteredTokens.map((token) => ({
-        startIndex: token.range.startColumn - 1,
-        scopes: fixTag(token.tag),
-      }));
-      tokens.sort((a, b) => a.startIndex - b.startIndex);
-
-      return {
-        tokens,
-        endState: new TokenState(st.line + 1),
-      };
-    },
-  });
   
   // Sends the crate data to rust-analyzer
   await state.init(JSON.stringify(crate));
-
-  let handle: any;
 
   let model = monaco.editor.createModel(exampleCode, modeId); 
   async function update() {

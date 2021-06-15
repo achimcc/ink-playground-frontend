@@ -3,9 +3,9 @@
 
 use std::sync::Arc;
 
-use cfg::CfgOptions;
+// use cfg::CfgOptions;
 
-use ide::{Analysis, AnalysisHost, CompletionConfig, DiagnosticsConfig, FileId, FilePosition, Indel, LineIndex, TextSize};
+use ide::{Analysis, AnalysisHost, CompletionConfig, DiagnosticsConfig, FileId, FilePosition, Indel, TextSize};
 use ide_db::helpers::{
     insert_use::{InsertUseConfig, MergeBehavior, PrefixKind},
     SnippetCap, 
@@ -22,9 +22,9 @@ extern crate web_sys;
 
 pub use wasm_bindgen_rayon::init_thread_pool;
 
-fn derive_analytics(host: &AnalysisHost, file_id: FileId, line_index: Arc<LineIndex>) -> JsValue {
+fn derive_analytics(host: &AnalysisHost, file_id: FileId) -> JsValue {
     let analysis = host.analysis();
-    let line_index = line_index;
+    let line_index = analysis.file_line_index(file_id).unwrap();
         let highlights: Vec<_> = analysis
             .highlight(file_id)
             .unwrap()
@@ -100,10 +100,10 @@ impl WorldState {
         log::warn!("update");
         init_panic_hook();
         let mut change = Change::new();
-        change.change_file(FileId(172), Some(Arc::new(code))); 
+        change.change_file(self.file_id, Some(Arc::new(code))); 
         web_sys::console::log_1(&"Apply Change!".into());
 
-        let line_index = self.analysis.file_line_index(self.file_id).unwrap();
+        // let line_index = self.analysis.file_line_index(self.file_id).unwrap();
 
         // This drops the current db snapshot to avoid deadlocks!
         let host = AnalysisHost::default();
@@ -112,7 +112,7 @@ impl WorldState {
         // Now its safe to apply the change! 
         self.analysis_host.apply_change(change); 
         web_sys::console::log_1(&"Derive Results!".into());
-        let result = derive_analytics(&self.analysis_host, FileId(172), line_index);
+        let result = derive_analytics(&self.analysis_host, self.file_id);
 
         // now we can give a snapsho back to rust-analyzer!
         self.analysis = self.analysis_host.analysis();
