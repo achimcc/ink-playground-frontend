@@ -101,12 +101,71 @@ const start = async (
     configureLanguage(monaco, state, allTokens)
   );
 
-  let model = monaco.editor.createModel(exampleCode, modeId);
+  class TokenState {
+    line: number;
+    equals: (other?: any) => boolean;
+    constructor(line: number = 0) {
+      this.line = line;
+      this.equals = () => true;
+    }
 
+    clone() {
+      const res = new TokenState(this.line);
+      res.line += 1;
+      return res;
+    }
+  }
+
+  function fixTag(tag: string) {
+    switch (tag) {
+      case "builtin":
+        return "variable.predefined";
+      case "attribute":
+        return "key";
+      case "macro":
+        return "number.hex";
+      case "literal":
+        return "number";
+      default:
+        return tag;
+    }
+  }
+
+  const setTokens = (allTokens: Array<any>) => monaco.languages.setTokensProvider(modeId, {
+    getInitialState: () => new TokenState(),
+    tokenize(_, st: TokenState) {
+      const filteredTokens = allTokens.filter(
+        (token) => token.range.startLineNumber === st.line
+      );
+
+      const tokens = filteredTokens.map((token) => ({
+        startIndex: token.range.startColumn - 1,
+        scopes: fixTag(token.tag),
+      }));
+      tokens.sort((a, b) => a.startIndex - b.startIndex);
+
+      return {
+        tokens,
+        endState: new TokenState(st.line + 1),
+      };
+    },
+  });
+  
+  // Sends the crate data to rust-analyzer
+  await state.init(JSON.stringify(crate));
+
+  let handle: any;
+
+  let model = monaco.editor.createModel(exampleCode, modeId); 
   async function update() {
-    const res = await state.update(JSON.stringify(crate));
+    const text = model.getValue();
+    const res = await state.update(text);
+    console.log('res: ', res);
     monaco.editor.setModelMarkers(model, modeId, res.diagnostics);
+    allTokens.length=0;
     allTokens.push(...res.highlights);
+    setTokens(allTokens);
+    console.log('alLTokens.length: ', allTokens.length);
   }
   await update();
   model.onDidChangeContent(update);

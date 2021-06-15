@@ -23,6 +23,10 @@ export class WorldState {
 */
   constructor();
 /**
+* @param {string} json
+*/
+  init(json: string): void;
+/**
 * @param {string} code
 * @returns {any}
 */
@@ -126,6 +130,7 @@ export interface InitOutput {
   readonly init_panic_hook: () => void;
   readonly __wbg_worldstate_free: (a: number) => void;
   readonly worldstate_new: () => number;
+  readonly worldstate_init: (a: number, b: number, c: number) => void;
   readonly worldstate_update: (a: number, b: number, c: number) => number;
   readonly worldstate_completions: (a: number, b: number, c: number) => number;
   readonly worldstate_hover: (a: number, b: number, c: number) => number;
