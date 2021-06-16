@@ -53,7 +53,7 @@ import "monaco-editor/esm/vs/editor/standalone/browser/toggleHighContrast/toggle
 
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 import exampleCode from "./example-code";
-import crate from "./crate.json";
+// import crate from "./crate.json";
 import encoding from "text-encoding";
 
 if (typeof TextEncoder === "undefined") {
@@ -102,6 +102,7 @@ const start = async (
   );
   
   // Sends the crate data to rust-analyzer
+  const crate = await import('./crate.json');
   await state.init(JSON.stringify(crate));
 
   let model = monaco.editor.createModel(exampleCode, modeId); 
