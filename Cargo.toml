@@ -8,6 +8,7 @@ edition = "2018"
 crate-type = ["cdylib"]
 
 
+
 [dependencies]
 console_error_panic_hook = { version = "0.1.6" }
 instant = { version = "0.1", features = ["wasm-bindgen"] }
@@ -22,7 +23,6 @@ wasm-bindgen-rayon = "1.0.2"
 
 ide = { path = "../rust-analyzer/crates/ide" }
 ide_db = { path = "../rust-analyzer/crates/ide_db" }
-cfg = { path = "../rust-analyzer/crates/cfg", version = "0.0.0" }
 
 [dependencies.web-sys]
 version = "0.3"

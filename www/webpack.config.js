@@ -37,8 +37,6 @@ module.exports = {
           return "editor.worker.js";
         case "ra":
           return "ra-worker.ts";
-        case "crate.json":
-          return "crate.json";
         default:
           return "bundle.[hash].js";
       }

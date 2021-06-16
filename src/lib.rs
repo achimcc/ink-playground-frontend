@@ -3,8 +3,6 @@
 
 use std::sync::Arc;
 
-// use cfg::CfgOptions;
-
 use ide::{Analysis, AnalysisHost, CompletionConfig, DiagnosticsConfig, FileId, FilePosition, Indel, TextSize};
 use ide_db::helpers::{
     insert_use::{InsertUseConfig, MergeBehavior, PrefixKind},
