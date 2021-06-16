@@ -102,8 +102,10 @@ const start = async (
   );
   
   // Sends the crate data to rust-analyzer
-  const crate = await import('./crate.json');
-  await state.init(JSON.stringify(crate));
+  const part1 = await import('./part1.json');
+  const part2 = await import('./part2.json');
+  await state.init(JSON.stringify(part1));
+  await state.init(JSON.stringify(part2));
 
   let model = monaco.editor.createModel(exampleCode, modeId); 
   async function update() {
