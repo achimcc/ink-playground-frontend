@@ -77,21 +77,18 @@ impl WorldState {
     #[wasm_bindgen(constructor)]
     pub fn new() -> Self {
     //    let (change, file_id) = get_change("".to_owned());
-        let file_id = FileId(0);
+        let file_id = FileId(172);
         let analysis_host = AnalysisHost::default();
         let analysis = analysis_host.analysis();
+        let analysis_host = AnalysisHost::default();
         Self { analysis, analysis_host, file_id }
     }
 
     pub fn init(&mut self, json: String)  {
         log::warn!("update");
         init_panic_hook();
-        self.file_id = FileId(172);
         let change: Change = serde_json::from_str(&json).expect("`Change` deserialization must work");
-        let mut analysis_host = AnalysisHost::default();
-        analysis_host.apply_change(change);
-        self.analysis = analysis_host.analysis();
-        self.analysis_host = analysis_host;
+        self.analysis_host.apply_change(change);
     }
 
     pub fn update(&mut self, code: String) -> JsValue {
@@ -100,8 +97,6 @@ impl WorldState {
         let mut change = Change::new();
         change.change_file(self.file_id, Some(Arc::new(code))); 
         web_sys::console::log_1(&"Apply Change!".into());
-
-        // let line_index = self.analysis.file_line_index(self.file_id).unwrap();
 
         // This drops the current db snapshot to avoid deadlocks!
         let host = AnalysisHost::default();

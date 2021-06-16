@@ -100,12 +100,15 @@ const start = async (
     modeId,
     configureLanguage(monaco, state, allTokens)
   );
+  let i = 0;
   
   // Sends the crate data to rust-analyzer
-  const part1 = await import('./part1.json');
-  const part2 = await import('./part2.json');
-  await state.init(JSON.stringify(part1));
-  await state.init(JSON.stringify(part2));
+  for (i=1; i<6; i++) {
+    const part = await import(`./part${i}.json`);
+    console.log(`./part${i}.json`);
+    await state.init(JSON.stringify(part));
+  }
+
 
   let model = monaco.editor.createModel(exampleCode, modeId); 
   async function update() {
