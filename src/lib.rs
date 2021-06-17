@@ -5,8 +5,9 @@ use std::sync::Arc;
 
 use ide::{Analysis, AnalysisHost, CompletionConfig, DiagnosticsConfig, FileId, FilePosition, Indel, TextSize};
 use ide_db::helpers::{
-    insert_use::{InsertUseConfig, MergeBehavior, PrefixKind},
+    insert_use::{InsertUseConfig, PrefixKind},
     SnippetCap, 
+    merge_imports::MergeBehavior,
 };
 pub use ide_db::base_db::{Change, CrateGraph, CrateId, Edition, Env, FileSet, SourceRoot, VfsPath,};
 use wasm_bindgen::{JsValue, prelude::*};
@@ -23,35 +24,35 @@ pub use wasm_bindgen_rayon::init_thread_pool;
 fn derive_analytics(host: &AnalysisHost, file_id: FileId) -> JsValue {
     let analysis = host.analysis();
     let line_index = analysis.file_line_index(file_id).unwrap();
-        let highlights: Vec<_> = analysis
-            .highlight(file_id)
-            .unwrap()
-            .into_iter()
-            .map(|hl| Highlight {
-                tag: Some(hl.highlight.tag.to_string()),
-                range: to_proto::text_range(hl.range, &line_index),
-            })
-            .collect();
-        let config = DiagnosticsConfig::default();
-        let diagnostics: Vec<_> = analysis
-            .diagnostics(&config, file_id)
-            .unwrap()
-            .into_iter()
-            .map(|d| {
-                let Range { startLineNumber, startColumn, endLineNumber, endColumn } =
-                    to_proto::text_range(d.range, &line_index);
-                Diagnostic {
-                    message: d.message,
-                    severity: to_proto::severity(d.severity),
-                    startLineNumber,
-                    startColumn,
-                    endLineNumber,
-                    endColumn,
-                }
-            })
-            .collect();
-        web_sys::console::log_1(&"All Done!".into());  
-        serde_wasm_bindgen::to_value(&UpdateResult { diagnostics, highlights }).unwrap()
+    let config = DiagnosticsConfig::default();
+    let diagnostics: Vec<_> = analysis
+        .diagnostics(&config, true, file_id)
+        .unwrap()
+        .into_iter()
+        .map(|d| {
+            let Range { startLineNumber, startColumn, endLineNumber, endColumn } =
+                to_proto::text_range(d.range, &line_index);
+            Diagnostic {
+                message: d.message,
+                severity: to_proto::severity(d.severity),
+                startLineNumber,
+                startColumn,
+                endLineNumber,
+                endColumn,
+            }
+        })
+        .collect();
+    let highlights: Vec<_> = analysis
+        .highlight(file_id)
+        .unwrap()
+        .into_iter()
+        .map(|hl| Highlight {
+            tag: Some(hl.highlight.tag.to_string()),
+            range: to_proto::text_range(hl.range, &line_index),
+        })
+        .collect();
+    web_sys::console::log_1(&"All Done!".into());  
+    serde_wasm_bindgen::to_value(&UpdateResult { diagnostics, highlights }).unwrap()
 }
 
 #[wasm_bindgen(start)]
@@ -76,38 +77,43 @@ pub struct WorldState {
 impl WorldState {
     #[wasm_bindgen(constructor)]
     pub fn new() -> Self {
-    //    let (change, file_id) = get_change("".to_owned());
-        let file_id = FileId(172);
+        let file_id = FileId(182);
         let analysis_host = AnalysisHost::default();
         let analysis = analysis_host.analysis();
         let analysis_host = AnalysisHost::default();
         Self { analysis, analysis_host, file_id }
     }
 
-    pub fn init(&mut self, json: String)  {
+    pub fn load(&mut self, json: String)  {
         log::warn!("update");
         init_panic_hook();
         let change: Change = serde_json::from_str(&json).expect("`Change` deserialization must work");
         self.analysis_host.apply_change(change);
     }
 
-    pub fn update(&mut self, code: String) -> JsValue {
+    pub fn update(&mut self, code: String)  {
         log::warn!("update");
         init_panic_hook();
         let mut change = Change::new();
         change.change_file(self.file_id, Some(Arc::new(code))); 
+        let analysis_host = AnalysisHost::default();
+        self.analysis = analysis_host.analysis();
         web_sys::console::log_1(&"Apply Change!".into());
-
-        // This drops the current db snapshot to avoid deadlocks!
-        let host = AnalysisHost::default();
-        self.analysis = host.analysis();
-
         // Now its safe to apply the change! 
         self.analysis_host.apply_change(change); 
-        web_sys::console::log_1(&"Derive Results!".into());
-        let result = derive_analytics(&self.analysis_host, self.file_id);
+        self.analysis = self.analysis_host.analysis();
+        web_sys::console::log_1(&"This worked!".into());
+    }
 
-        // now we can give a snapsho back to rust-analyzer!
+    pub fn analyze(&mut self) -> JsValue {
+        log::warn!("analyze");
+        init_panic_hook();
+        // this unblocks AnalysisHost
+        let analysis_host = AnalysisHost::default();
+        self.analysis = analysis_host.analysis();
+        // Now derive results
+        let result = derive_analytics(&self.analysis_host, self.file_id);
+        // re-assign alysis for the other methods
         self.analysis = self.analysis_host.analysis();
         web_sys::console::log_1(&"Now Complete!".into());
         result

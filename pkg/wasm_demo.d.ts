@@ -25,12 +25,15 @@ export class WorldState {
 /**
 * @param {string} json
 */
-  init(json: string): void;
+  load(json: string): void;
 /**
 * @param {string} code
+*/
+  update(code: string): void;
+/**
 * @returns {any}
 */
-  update(code: string): any;
+  analyze(): any;
 /**
 * @param {number} line_number
 * @param {number} column
@@ -130,8 +133,9 @@ export interface InitOutput {
   readonly init_panic_hook: () => void;
   readonly __wbg_worldstate_free: (a: number) => void;
   readonly worldstate_new: () => number;
-  readonly worldstate_init: (a: number, b: number, c: number) => void;
-  readonly worldstate_update: (a: number, b: number, c: number) => number;
+  readonly worldstate_load: (a: number, b: number, c: number) => void;
+  readonly worldstate_update: (a: number, b: number, c: number) => void;
+  readonly worldstate_analyze: (a: number) => number;
   readonly worldstate_completions: (a: number, b: number, c: number) => number;
   readonly worldstate_hover: (a: number, b: number, c: number) => number;
   readonly worldstate_code_lenses: (a: number) => number;

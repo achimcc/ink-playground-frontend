@@ -3,8 +3,9 @@
 export function init_panic_hook(): void;
 export function __wbg_worldstate_free(a: number): void;
 export function worldstate_new(): number;
-export function worldstate_init(a: number, b: number, c: number): void;
-export function worldstate_update(a: number, b: number, c: number): number;
+export function worldstate_load(a: number, b: number, c: number): void;
+export function worldstate_update(a: number, b: number, c: number): void;
+export function worldstate_analyze(a: number): number;
 export function worldstate_completions(a: number, b: number, c: number): number;
 export function worldstate_hover(a: number, b: number, c: number): number;
 export function worldstate_code_lenses(a: number): number;

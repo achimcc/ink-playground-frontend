@@ -103,24 +103,23 @@ const start = async (
   let i = 0;
   
   // Sends the crate data to rust-analyzer
-  for (i=1; i<6; i++) {
+  for (i=1; i<8; i++) {
     const part = await import(`./part${i}.json`);
     console.log(`./part${i}.json`);
-    await state.init(JSON.stringify(part));
-  }
-
+    await state.load(JSON.stringify(part));
+  };
 
   let model = monaco.editor.createModel(exampleCode, modeId); 
   async function update() {
     const text = model.getValue();
-    const res = await state.update(text);
-    console.log('res: ', res);
+    await state.update(text);
+    const res = await state.analyze();
     monaco.editor.setModelMarkers(model, modeId, res.diagnostics);
     allTokens.length=0;
     allTokens.push(...res.highlights);
     setTokens(allTokens);
-    console.log('alLTokens.length: ', allTokens.length);
   }
+  // await state.test(exampleCode);
   await update();
   model.onDidChangeContent(update);
 
