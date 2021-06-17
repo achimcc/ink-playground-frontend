@@ -159,6 +159,7 @@ const Editor: React.FC<Props> = ({
 
   const editor = useRef<monaco.editor.IStandaloneCodeEditor>();
 
+  
   useEffect(() => {
     if (divNode) {
       start(divNode, numbering, minimap, isDark).then(
