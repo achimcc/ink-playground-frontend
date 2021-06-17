@@ -117,7 +117,7 @@ const start = async (
     monaco.editor.setModelMarkers(model, modeId, res.diagnostics);
     allTokens.length=0;
     allTokens.push(...res.highlights);
-    setTokens(allTokens);
+    // setTokens(allTokens);
   }
   // await state.test(exampleCode);
   await update();
