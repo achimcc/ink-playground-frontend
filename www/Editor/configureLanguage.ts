@@ -1,7 +1,8 @@
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 import * as rustConf from "monaco-editor/esm/vs/basic-languages/rust/rust";
+import "./index.css";
 
-import { WorldState } from "../pkg/wasm_demo";
+import { WorldState } from "../../pkg/wasm_demo";
 
 type Monaco = typeof monaco;
 
@@ -9,12 +10,9 @@ const modeId = "ra-rust";
 
 export const configureLanguage =
   (monaco: Monaco, state: WorldState, allTokens: any[]) => async () => {
-    console.log(modeId);
-
     monaco.languages.setLanguageConfiguration(modeId, rustConf.conf);
     monaco.languages.setLanguageConfiguration("rust", rustConf.conf);
     monaco.languages.setMonarchTokensProvider("rust", rustConf.language);
-
     monaco.languages.registerHoverProvider(modeId, {
       provideHover: (_, pos) => state.hover(pos.lineNumber, pos.column),
     });
@@ -148,37 +146,38 @@ export const configureLanguage =
     setTokens(allTokens);
   };
 
-  class TokenState {
-    line: number;
-    equals: (other?: any) => boolean;
-    constructor(line: number = 0) {
-      this.line = line;
-      this.equals = () => true;
-    }
-
-    clone() {
-      const res = new TokenState(this.line);
-      res.line += 1;
-      return res;
-    }
+class TokenState {
+  line: number;
+  equals: (other?: any) => boolean;
+  constructor(line: number = 0) {
+    this.line = line;
+    this.equals = () => true;
   }
 
-  function fixTag(tag: string) {
-    switch (tag) {
-      case "builtin":
-        return "variable.predefined";
-      case "attribute":
-        return "key";
-      case "macro":
-        return "number.hex";
-      case "literal":
-        return "number";
-      default:
-        return tag;
-    }
+  clone() {
+    const res = new TokenState(this.line);
+    res.line += 1;
+    return res;
   }
+}
 
-  export const setTokens = (allTokens: Array<any>) => monaco.languages.setTokensProvider(modeId, {
+function fixTag(tag: string) {
+  switch (tag) {
+    case "builtin":
+      return "variable.predefined";
+    case "attribute":
+      return "key";
+    case "macro":
+      return "number.hex";
+    case "literal":
+      return "number";
+    default:
+      return tag;
+  }
+}
+
+export const setTokens = (allTokens: Array<any>) =>
+  monaco.languages.setTokensProvider(modeId, {
     getInitialState: () => new TokenState(),
     tokenize(_, st: TokenState) {
       const filteredTokens = allTokens.filter(
@@ -196,4 +195,4 @@ export const configureLanguage =
         endState: new TokenState(st.line + 1),
       };
     },
-  }); 
+  });

@@ -9497,10 +9497,22 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
-"monaco-editor@npm:^0.23.0":
-  version: 0.23.0
-  resolution: "monaco-editor@npm:0.23.0"
-  checksum: 505de80fdea26359eff9837f2d9fd033e45de81e8e07f22464c0dd41aff386601489b9e579e8c962c3b1a6ed5690e936c09f84354d31d1f8bac7ed59e1ebf291
+"monaco-editor-webpack-plugin@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "monaco-editor-webpack-plugin@npm:4.0.0"
+  dependencies:
+    loader-utils: ^2.0.0
+  peerDependencies:
+    monaco-editor: 0.25.x
+    webpack: ^4.5.0 || 5.x
+  checksum: 32112b06658c89836a42a89a6c0affab24b609ff9a252ab7fc07469794bb91cbbf21260c6ca400069c3f574127729989ecc6169ce11b3312b4898ab40c482420
+  languageName: node
+  linkType: hard
+
+"monaco-editor@npm:^0.25.2":
+  version: 0.25.2
+  resolution: "monaco-editor@npm:0.25.2"
+  checksum: d173950fb3ee1c5cc5a6047684e4002c79ec81a517337d2a504558f606a2ba4b9adbea1f2e76825c9860765a364eb96f478b974f96c66acf8423cd5a8e724929
   languageName: node
   linkType: hard
 
@@ -11591,7 +11603,8 @@ fsevents@^2.1.2:
     jest-resolve: 26.6.0
     jest-watch-typeahead: 0.6.1
     mini-css-extract-plugin: 0.11.3
-    monaco-editor: ^0.23.0
+    monaco-editor: ^0.25.2
+    monaco-editor-webpack-plugin: ^4.0.0
     optimize-css-assets-webpack-plugin: 5.0.4
     pnp-webpack-plugin: 1.6.4
     postcss-flexbugs-fixes: 4.2.1
@@ -13870,11 +13883,11 @@ typescript@^4.1.2:
 
 "typescript@patch:typescript@^4.1.2#builtin<compat/typescript>":
   version: 4.2.4
-  resolution: "typescript@patch:typescript@npm%3A4.2.4#builtin<compat/typescript>::version=4.2.4&hash=a45b0e"
+  resolution: "typescript@patch:typescript@npm%3A4.2.4#builtin<compat/typescript>::version=4.2.4&hash=ddfc1b"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 3be44317593182e8ce494c114e7ad9b0bb2553a22f3085cc6da4f0a36912c20850daa9be4c898af2ab6fc8b12f430c1c9e46ac715721867cd38643f2350d3ef9
+  checksum: 64658fdf27872904641dcaacf925e6b5a52fb4aa4881a5a726fc78a11b76748423ce9e996dac42313729321061c4dd38a06108014f8d07b222dcff2687037186
   languageName: node
   linkType: hard
 

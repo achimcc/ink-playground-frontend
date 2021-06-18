@@ -1,4 +1,5 @@
 const path = require("path");
+const MonacoWebpackPlugin = require("monaco-editor-webpack-plugin");
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 
 module.exports = {
@@ -6,7 +7,6 @@ module.exports = {
   entry: {
     app: "./index.tsx",
     ra: "./workers/ra-worker.ts",
-    "editor.worker": "monaco-editor/esm/vs/editor/editor.worker.js",
   },
   module: {
     rules: [
@@ -33,8 +33,6 @@ module.exports = {
     globalObject: "self",
     filename: (chunkData) => {
       switch (chunkData.chunk.name) {
-        case "editor.worker":
-          return "editor.worker.js";
         case "ra":
           return "ra-worker.ts";
         default:
@@ -48,6 +46,7 @@ module.exports = {
       title: "Rust Analyzer",
       template: "./index.html",
     }),
+    new MonacoWebpackPlugin(),
   ],
   // It is needed for firefox works
   devServer: {

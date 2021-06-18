@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Editor from "./Editor";
+import Editor from "./Editor/Editor";
 
 function App() {
   const [isDark, setIsDark] = useState(true);
