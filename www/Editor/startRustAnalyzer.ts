@@ -43,8 +43,8 @@ export const startRustAnalyzer = async (
 
   // Sends the crate data to rust-analyzer
   for (i = 1; i < 8; i++) {
-    const part = await import(`./part${i}.json`);
-    console.log(`./part${i}.json`);
+    const part = await import(`./data/part${i}.json`);
+    console.log(`./data/part${i}.txt`);
     await state.load(JSON.stringify(part));
   }
 

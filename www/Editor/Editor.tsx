@@ -12,11 +12,6 @@ import { useCallback, useEffect, useRef } from "react";
 import React from "react";
 
 import { startRustAnalyzer } from "./startRustAnalyzer";
-/*
-(window as any).MonacoEnvironment = {
-  getWorkerUrl: () => "./editor.worker.bundle.js",
-};
-*/
 
 const modeId = "ra-rust"; // not "rust" to circumvent conflict
 monaco.languages.register({
@@ -27,7 +22,7 @@ monaco.languages.register({
   // language for hover info
   id: "rust",
 });
-
+MonacoEnvironment;
 interface Props {
   width: number;
   height: number;
