@@ -12,11 +12,11 @@ if (typeof TextEncoder === "undefined") {
 
 import { configureLanguage, setTokens } from "./configureLanguage";
 import { createRa } from "../workers/createRa";
-
+/*
 (window as any).MonacoEnvironment = {
   getWorkerUrl: () => "./editor.worker.bundle.js",
 };
-
+*/
 const modeId = "ra-rust"; // not "rust" to circumvent conflict
 monaco.languages.register({
   // language for editor

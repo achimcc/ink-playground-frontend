@@ -1,6 +1,4 @@
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
-import exampleCode from "./example-code";
-// import crate from "./crate.json";
 import encoding from "text-encoding";
 
 if (typeof TextEncoder === "undefined") {
@@ -13,13 +11,12 @@ import "./index.css";
 import { useCallback, useEffect, useRef } from "react";
 import React from "react";
 
-import { configureLanguage, setTokens } from "./configureLanguage";
-import { createRa } from "../workers/createRa";
 import { startRustAnalyzer } from "./startRustAnalyzer";
-
+/*
 (window as any).MonacoEnvironment = {
   getWorkerUrl: () => "./editor.worker.bundle.js",
 };
+*/
 
 const modeId = "ra-rust"; // not "rust" to circumvent conflict
 monaco.languages.register({
