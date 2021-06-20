@@ -1,5 +1,4 @@
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
-import exampleCode from "./example-code";
 import encoding from "text-encoding";
 import "./index.css";
 
@@ -22,15 +21,7 @@ monaco.languages.register({
   id: "rust",
 });
 
-export const startRustAnalyzer = async (
-  domElement: HTMLElement,
-  numbering: boolean,
-  useMinimap: boolean = false,
-  isDark: boolean
-) => {
-  var loadingText = document.createTextNode("Loading wasm...");
-  domElement.appendChild(loadingText);
-
+export const startRustAnalyzer = async (model: monaco.editor.ITextModel) => {
   const state = await createRa();
 
   const allTokens: Array<any> = [];
@@ -48,7 +39,6 @@ export const startRustAnalyzer = async (
     await state.load(JSON.stringify(part));
   }
 
-  let model = monaco.editor.createModel(exampleCode, modeId);
   async function update() {
     const text = model.getValue();
     await state.update(text);
@@ -61,16 +51,5 @@ export const startRustAnalyzer = async (
   // await state.test(exampleCode);
   await update();
   model.onDidChangeContent(update);
-
-  domElement.removeChild(loadingText);
-
-  const myEditor = monaco.editor.create(domElement, {
-    theme: isDark ? "vs-dark" : "vs",
-    minimap: { enabled: useMinimap },
-    lineNumbers: numbering ? "on" : "off",
-    model: model,
-  });
-
-  window.onresize = () => myEditor.layout();
-  return myEditor;
+  return model;
 };

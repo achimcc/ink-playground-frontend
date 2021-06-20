@@ -1,5 +1,6 @@
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 import encoding from "text-encoding";
+import exampleCode from "./example-code";
 
 if (typeof TextEncoder === "undefined") {
   // Edge polyfill, https://rustwasm.github.io/docs/wasm-bindgen/reference/browser-support.html
@@ -48,8 +49,20 @@ const Editor: React.FC<Props> = ({
 
   useEffect(() => {
     if (divNode) {
-      startRustAnalyzer(divNode, numbering, minimap, isDark).then(
-        (m) => (editor.current = m)
+      var loadingText = document.createTextNode("Loading wasm...");
+      divNode.appendChild(loadingText);
+      let model = monaco.editor.createModel(exampleCode, "rust");
+      const myEditor = monaco.editor.create(divNode, {
+        theme: isDark ? "vs-dark" : "vs",
+        minimap: { enabled: minimap },
+        lineNumbers: numbering ? "on" : "off",
+        model: model,
+      });
+      editor.current = myEditor;
+      divNode.removeChild(loadingText);
+      window.onresize = () => myEditor.layout();
+      startRustAnalyzer(model).then((m) =>
+        monaco.editor.setModelLanguage(m, modeId)
       );
     }
   }, [assignRef]);
