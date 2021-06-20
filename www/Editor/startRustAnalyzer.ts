@@ -33,9 +33,8 @@ export const startRustAnalyzer = async (model: monaco.editor.ITextModel) => {
   let i = 0;
   // Sends the crate data to rust-analyzer
   for (i = 1; i < 8; i++) {
-    const part = await fetch(`./Editor/data/part${i}.json`);
+    const part = await fetch(`./part${i}.json`);
     const res = await part.text();
-    //  console.log("res: ", res);
     await state.load(res);
   }
 
