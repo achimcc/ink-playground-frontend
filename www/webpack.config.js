@@ -1,6 +1,7 @@
 const path = require("path");
 const MonacoWebpackPlugin = require("monaco-editor-webpack-plugin");
 const HtmlWebPackPlugin = require("html-webpack-plugin");
+const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = {
   mode: "production",
@@ -90,6 +91,9 @@ module.exports = {
         "!wordOperations",
         "!wordPartOperations",
       ],
+    }),
+    new CopyWebpackPlugin({
+      patterns: [{ from: "Editor/data" }],
     }),
   ],
   // It is needed for firefox works
