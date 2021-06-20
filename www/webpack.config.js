@@ -1,6 +1,8 @@
 const path = require("path");
 const MonacoWebpackPlugin = require("monaco-editor-webpack-plugin");
 const HtmlWebPackPlugin = require("html-webpack-plugin");
+const BundleAnalyzerPlugin =
+  require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 
 module.exports = {
   mode: "production",
@@ -36,7 +38,7 @@ module.exports = {
         case "ra":
           return "ra-worker.ts";
         default:
-          return "bundle.[hash].js";
+          return "bundle.[contenthash].js";
       }
     },
     path: path.resolve(__dirname, "dist"),
@@ -46,7 +48,52 @@ module.exports = {
       title: "Rust Analyzer",
       template: "./index.html",
     }),
-    new MonacoWebpackPlugin(),
+    new MonacoWebpackPlugin({
+      // "filename" must match what we configure in output
+      filename: "[name].[contenthash].bundle.js",
+      languages: ["rust"],
+      features: [
+        "!accessibilityHelp",
+        "!bracketMatching",
+        "!caretOperations",
+        "!clipboard",
+        "!codeAction",
+        "!codelens",
+        "!colorDetector",
+        "!comment",
+        "!contextmenu",
+        "!cursorUndo",
+        "!dnd",
+        "!folding",
+        "!fontZoom",
+        "!format",
+        "!gotoError",
+        "!gotoLine",
+        "!gotoSymbol",
+        "!hover",
+        "!iPadShowKeyboard",
+        "!inPlaceReplace",
+        "!inspectTokens",
+        "!linesOperations",
+        "!links",
+        "!multicursor",
+        "!parameterHints",
+        "!quickCommand",
+        "!quickOutline",
+        "!referenceSearch",
+        "!rename",
+        "!smartSelect",
+        "!snippets",
+        "!suggest",
+        "!toggleHighContrast",
+        "!toggleTabFocusMode",
+        "!transpose",
+        "!wordHighlighter",
+        "!wordOperations",
+        "!wordPartOperations",
+      ],
+    }),
+    new BundleAnalyzerPlugin(),
   ],
   // It is needed for firefox works
   devServer: {
