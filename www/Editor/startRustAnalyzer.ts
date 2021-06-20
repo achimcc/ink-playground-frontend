@@ -31,12 +31,12 @@ export const startRustAnalyzer = async (model: monaco.editor.ITextModel) => {
     configureLanguage(monaco, state, allTokens)
   );
   let i = 0;
-
   // Sends the crate data to rust-analyzer
   for (i = 1; i < 8; i++) {
-    const part = await import(`./data/part${i}.json`);
-    console.log(`./data/part${i}.txt`);
-    await state.load(JSON.stringify(part));
+    const part = await fetch(`./Editor/data/part${i}.json`);
+    const res = await part.text();
+    //  console.log("res: ", res);
+    await state.load(res);
   }
 
   async function update() {
