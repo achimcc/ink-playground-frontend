@@ -1,5 +1,8 @@
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 import encoding from "text-encoding";
+import ClipLoader from "react-spinners/ClipLoader";
+import { FaCheckCircle } from "react-icons/fa";
+
 import exampleCode from "./example-code";
 
 if (typeof TextEncoder === "undefined") {
@@ -9,7 +12,7 @@ if (typeof TextEncoder === "undefined") {
 }
 
 import "./index.css";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import React from "react";
 
 import { startRustAnalyzer } from "./startRustAnalyzer";
@@ -46,6 +49,7 @@ const Editor: React.FC<Props> = ({
   }, []);
 
   const editor = useRef<monaco.editor.IStandaloneCodeEditor>();
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     if (divNode) {
@@ -58,9 +62,10 @@ const Editor: React.FC<Props> = ({
       });
       editor.current = myEditor;
       window.onresize = () => myEditor.layout();
-      startRustAnalyzer(model).then((m) =>
-        monaco.editor.setModelLanguage(m, modeId)
-      );
+      startRustAnalyzer(model).then((m) => {
+        monaco.editor.setModelLanguage(m, modeId);
+        setIsLoading(false);
+      });
     }
   }, [assignRef]);
 
@@ -77,15 +82,49 @@ const Editor: React.FC<Props> = ({
   }, [numbering, editor]);
 
   return (
-    <div
-      id="test"
-      ref={assignRef}
-      style={{
-        height: `${height}vh`,
-        width: `${width}vw`,
-        border: "1px solid black",
-      }}
-    ></div>
+    <>
+      <div
+        id="test"
+        ref={assignRef}
+        style={{
+          height: `${height}vh`,
+          width: `${width}vw`,
+          border: "1px solid black",
+        }}
+      ></div>
+
+      <div
+        style={{
+          width: `${width}vw`,
+          border: "1px solid black",
+          display: "table",
+        }}
+      >
+        {isLoading ? (
+          <div>
+            <div style={{ padding: "1px 2px", display: "table-cell" }}>
+              <ClipLoader size={12} />
+            </div>
+            <div style={{ display: "table-cell" }}>
+              Loading Rust-Analyzer...
+            </div>
+          </div>
+        ) : (
+          <>
+            <div
+              style={{
+                padding: "1px 2px",
+                display: "table-cell",
+                width: "18px",
+              }}
+            >
+              <FaCheckCircle />
+            </div>
+            <div style={{ display: "table-cell" }}>Rust Analyzer Ready</div>
+          </>
+        )}
+      </div>
+    </>
   );
 };
 
