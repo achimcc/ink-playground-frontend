@@ -1,4 +1,4 @@
-import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
+// import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 import encoding from "text-encoding";
 import "./index.css";
 
@@ -12,20 +12,19 @@ import { configureLanguage, setTokens } from "./configureLanguage";
 import { createRa } from "../workers/createRa";
 
 const modeId = "ra-rust"; // not "rust" to circumvent conflict
-monaco.languages.register({
-  // language for editor
-  id: modeId,
-});
-monaco.languages.register({
-  // language for hover info
-  id: "rust",
-});
 
-export const startRustAnalyzer = async (model: monaco.editor.ITextModel) => {
+export const startRustAnalyzer = async (monaco: any, model: any) => {
+  monaco.languages.register({
+    // language for editor
+    id: modeId,
+  });
+  monaco.languages.register({
+    // language for hover info
+    id: "rust",
+  });
   const state = await createRa();
 
   const allTokens: Array<any> = [];
-
   monaco.languages.onLanguage(
     modeId,
     configureLanguage(monaco, state, allTokens)
@@ -45,10 +44,12 @@ export const startRustAnalyzer = async (model: monaco.editor.ITextModel) => {
     monaco.editor.setModelMarkers(model, modeId, res.diagnostics);
     allTokens.length = 0;
     allTokens.push(...res.highlights);
-    setTokens(allTokens);
+    setTokens(monaco, allTokens);
   }
   // await state.test(exampleCode);
   await update();
   model.onDidChangeContent(update);
+  // @ts-ignore
+  monaco.editor.setModelLanguage(model, modeId);
   return model;
 };

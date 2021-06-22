@@ -2,6 +2,8 @@ const path = require("path");
 const MonacoWebpackPlugin = require("monaco-editor-webpack-plugin");
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const BundleAnalyzerPlugin =
+  require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 
 module.exports = {
   mode: "production",
@@ -55,7 +57,26 @@ module.exports = {
     new CopyWebpackPlugin({
       patterns: [{ from: "Editor/data" }],
     }),
+    new BundleAnalyzerPlugin(),
   ],
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        editor: {
+          // Editor bundle
+          test: /[\\/]node_modules\/(monaco-editor\/esm\/vs\/(nls\.js|editor|platform|base|basic-languages|language\/(css|html|json|typescript)\/monaco\.contribution\.js)|style-loader\/lib|css-loader\/lib\/css-base\.js)/,
+          name: "monaco-editor",
+          chunks: "async",
+        },
+        languages: {
+          // Language bundle
+          test: /[\\/]node_modules\/monaco-editor\/esm\/vs\/language\/(css|html|json|typescript)\/(_deps|lib|fillers|languageFeatures\.js|workerManager\.js|tokenization\.js|(tsMode|jsonMode|htmlMode|cssMode)\.js|(tsWorker|jsonWorker|htmlWorker|cssWorker)\.js)/,
+          name: "monaco-languages",
+          chunks: "async",
+        },
+      },
+    },
+  },
   // It is needed for firefox works
   devServer: {
     headers: {
