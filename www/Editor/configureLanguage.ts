@@ -18,7 +18,7 @@ export const configureLanguage =
       // language for hover info
       id: "rust",
     });
-    // monaco.languages.setLanguageConfiguration(modeId, rustConf.conf);
+
     // monaco.languages.setLanguageConfiguration("rust", rustConf.conf);
     // monaco.languages.setMonarchTokensProvider("rust", rustConf.language);
     monaco.languages.registerHoverProvider(modeId, {

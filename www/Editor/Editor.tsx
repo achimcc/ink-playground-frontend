@@ -66,6 +66,7 @@ const Editor: React.FC<Props> = ({
       model: model,
     });
     editor.current = myEditor;
+    myEditor.updateOptions({ theme: isDark ? "vs-dark" : "vs" });
     window.onresize = () => myEditor.layout();
     await startRustAnalyzer(monaco, model);
     setIsLoading(false);
