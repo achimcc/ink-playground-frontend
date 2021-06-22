@@ -187,6 +187,10 @@ function fixTag(tag: string) {
       return "variable.predefined";
     case "attribute":
       return "key";
+    case "builtin_type":
+      return "keyword";
+    case "string_literal":
+      return "string";
     case "macro":
       return "number.hex";
     case "literal":

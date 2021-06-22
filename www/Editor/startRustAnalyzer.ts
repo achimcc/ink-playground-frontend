@@ -50,6 +50,7 @@ export const startRustAnalyzer = async (monaco: any, model: any) => {
     const text = model.getValue();
     await state.update(text);
     const res = await state.analyze();
+    console.log("res: ", res);
     monaco.editor.setModelMarkers(model, modeId, res.diagnostics);
     allTokens.length = 0;
     allTokens.push(...res.highlights);
