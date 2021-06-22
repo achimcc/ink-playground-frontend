@@ -57,7 +57,7 @@ module.exports = {
     new CopyWebpackPlugin({
       patterns: [{ from: "Editor/data" }],
     }),
-    new BundleAnalyzerPlugin(),
+    // new BundleAnalyzerPlugin(),
   ],
   optimization: {
     splitChunks: {
