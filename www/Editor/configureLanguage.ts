@@ -188,7 +188,11 @@ function fixTag(tag: string) {
     case "attribute":
       return "key";
     case "builtin_type":
+    case "self_type":
+    case "bool_literal":
       return "keyword";
+    case "value_param":
+      return "value";
     case "string_literal":
       return "string";
     case "macro":
