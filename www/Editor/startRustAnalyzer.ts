@@ -22,6 +22,15 @@ export const startRustAnalyzer = async (monaco: any, model: any) => {
     // language for hover info
     id: "rust",
   });
+  console.log("setting language to rust!");
+  const rustConf = await import(
+    /* webpackChunkName: "monaco-editor" */ "monaco-editor/esm/vs/basic-languages/rust/rust"
+  );
+  monaco.editor.setModelLanguage(model, "rust");
+  monaco.languages.setLanguageConfiguration("rust", rustConf.conf);
+  monaco.languages.setMonarchTokensProvider("rust", rustConf.language);
+  monaco.languages.setLanguageConfiguration(modeId, rustConf.conf);
+  console.log("now starting ra worker!");
   const state = await createRa();
 
   const allTokens: Array<any> = [];
