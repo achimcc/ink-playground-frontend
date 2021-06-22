@@ -57,20 +57,22 @@ module.exports = {
     new CopyWebpackPlugin({
       patterns: [{ from: "Editor/data" }],
     }),
-    //  new BundleAnalyzerPlugin(),
+    new BundleAnalyzerPlugin(),
   ],
+  /*
   optimization: {
     splitChunks: {
       cacheGroups: {
         editor: {
           // Editor bundle
-          test: /[\\/]node_modules\/(monaco-editor\/esm\/vs\/(nls\.js|editor|platform|base|basic-languages\/rust\.contribution\.js)|style-loader\/lib|css-loader\/lib\/css-base\.js)/,
+          test: /[\\/]node_modules\/(monaco-editor\/esm\/vs\/(nls\.js|editor\.contribution\.js)|style-loader\/lib|css-loader\/lib\/css-base\.js)/,
           name: "monaco-editor",
           chunks: "async",
         },
       },
     },
   },
+  */
   // It is needed for firefox works
   devServer: {
     headers: {

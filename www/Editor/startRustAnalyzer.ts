@@ -22,7 +22,6 @@ export const startRustAnalyzer = async (monaco: any, model: any) => {
     // language for hover info
     id: "rust",
   });
-  console.log("setting language to rust!");
   const rustConf = await import(
     /* webpackChunkName: "monaco-editor" */ "monaco-editor/esm/vs/basic-languages/rust/rust"
   );
@@ -30,7 +29,8 @@ export const startRustAnalyzer = async (monaco: any, model: any) => {
   monaco.languages.setLanguageConfiguration("rust", rustConf.conf);
   monaco.languages.setMonarchTokensProvider("rust", rustConf.language);
   monaco.languages.setLanguageConfiguration(modeId, rustConf.conf);
-  console.log("now starting ra worker!");
+
+  // start rust-analyzer web worker
   const state = await createRa();
 
   const allTokens: Array<any> = [];
@@ -39,7 +39,7 @@ export const startRustAnalyzer = async (monaco: any, model: any) => {
     configureLanguage(monaco, state, allTokens)
   );
   let i = 0;
-  // Sends the crate data to rust-analyzer
+  // Fetch the crate data and send it to rust-analyzer
   for (i = 1; i < 8; i++) {
     const part = await fetch(`./part${i}.json`);
     const res = await part.text();
@@ -58,7 +58,8 @@ export const startRustAnalyzer = async (monaco: any, model: any) => {
   // await state.test(exampleCode);
   await update();
   model.onDidChangeContent(update);
-  // @ts-ignore
+
+  // rust analyzer loaded and diagnostics ready -> switch to rust analyzer
   monaco.editor.setModelLanguage(model, modeId);
   return model;
 };

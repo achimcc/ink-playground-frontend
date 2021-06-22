@@ -50,15 +50,10 @@ const Editor: React.FC<Props> = ({
 
   async function init() {
     console.log("getting monaco");
-    await import(/* webpackChunkName: "monaco-editor" */ "monaco-editor");
     const monaco = await import(
       /* webpackChunkName: "monaco-editor" */ "monaco-editor/esm/vs/editor/editor.api"
     );
-    console.log("creating model");
-    // @ts-ignore
     let model = monaco.editor.createModel(exampleCode);
-    console.log("creating editor", "rust");
-    // @ts-ignore
     const myEditor = monaco.editor.create(divNode, {
       theme: isDark ? "hc-black" : "vs",
       minimap: { enabled: minimap },
