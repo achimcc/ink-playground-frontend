@@ -60,6 +60,7 @@
     "semver": "7.3.2",
     "terser-webpack-plugin": "4.2.3",
     "text-encoding": "^0.7.0",
+    "threads": "^1.6.5",
     "ts-pnp": "1.2.0",
     "typescript": "^4.1.2",
     "url-loader": "4.1.1",

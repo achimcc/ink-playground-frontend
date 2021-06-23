@@ -3,7 +3,7 @@ import encoding from "text-encoding";
 import ClipLoader from "react-spinners/ClipLoader";
 import { FaCheckCircle } from "react-icons/fa";
 
-import exampleCode from "./example-code";
+import exampleCode from "./data/example-code";
 
 if (typeof TextEncoder === "undefined") {
   // Edge polyfill, https://rustwasm.github.io/docs/wasm-bindgen/reference/browser-support.html
@@ -15,7 +15,7 @@ import "./index.css";
 import { useCallback, useEffect, useRef, useState } from "react";
 import React from "react";
 
-import { startRustAnalyzer } from "./startRustAnalyzer";
+import { startRustAnalyzer } from "./utils/startRustAnalyzer";
 
 const modeId = "ra-rust"; // not "rust" to circumvent conflict
 (window as any).MonacoEnvironment = {

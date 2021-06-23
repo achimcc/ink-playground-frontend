@@ -1,8 +1,8 @@
 // import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 // import * as rustConf from "monaco-editor/esm/vs/basic-languages/rust/rust";
-import "./index.css";
+import "../index.css";
 
-import { WorldState } from "../../pkg/wasm_demo";
+import { WorldState } from "../../../pkg/wasm_demo";
 // @ts-ignore
 // type Monaco = typeof monaco;
 

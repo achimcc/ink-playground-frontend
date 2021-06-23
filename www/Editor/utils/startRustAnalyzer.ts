@@ -1,15 +1,15 @@
 // import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 import encoding from "text-encoding";
-import "./index.css";
+
+import { configureLanguage, setTokens } from "./configureLanguage";
+import { createRa } from "../workers/createRa";
+import "../index.css";
 
 if (typeof TextEncoder === "undefined") {
   // Edge polyfill, https://rustwasm.github.io/docs/wasm-bindgen/reference/browser-support.html
   self.TextEncoder = encoding.TextEncoder;
   self.TextDecoder = encoding.TextDecoder;
 }
-
-import { configureLanguage, setTokens } from "./configureLanguage";
-import { createRa } from "../workers/createRa";
 
 const modeId = "ra-rust"; // not "rust" to circumvent conflict
 
