@@ -26,7 +26,7 @@ export const createRa = async (): Promise<WorldState> => {
         return Reflect.get(target, prop, _receiver);
       }
       return async (...args: any[]) => {
-        return callWorker(prop, ...args);
+        return callWorker(prop, ...Array.prototype.slice.call(args));
       };
     },
   };

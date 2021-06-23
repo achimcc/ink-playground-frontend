@@ -1,4 +1,4 @@
-import init, { initThreadPool, WorldState } from "../wasm/wasm_demo";
+import init, { initThreadPool, WorldState } from "../../../pkg/wasm_demo";
 
 const start = async () => {
   await init();
@@ -12,7 +12,9 @@ const start = async () => {
   onmessage = (e) => {
     const { which, args, id } = e.data;
     if (id === "ra-worker-ready" || !which) return;
-    const result = (state[which as Which] as any)(...args);
+    const result = (state[which as Which] as any)(
+      ...Array.prototype.slice.call(args)
+    );
     postMessage({
       id: id,
       result: result,
