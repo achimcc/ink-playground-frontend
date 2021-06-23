@@ -1,4 +1,3 @@
-// import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 import encoding from "text-encoding";
 import ClipLoader from "react-spinners/ClipLoader";
 import { FaCheckCircle } from "react-icons/fa";
@@ -11,7 +10,6 @@ if (typeof TextEncoder === "undefined") {
   self.TextDecoder = encoding.TextDecoder;
 }
 
-import "./index.css";
 import { useCallback, useEffect, useRef, useState } from "react";
 import React from "react";
 
