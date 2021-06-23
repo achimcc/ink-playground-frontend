@@ -77,11 +77,12 @@ module.exports = {
       },
     },
   },
+  tester: {},
   // It is needed for firefox works
   devServer: {
     headers: {
       "Cross-Origin-Embedder-Policy": "require-corp",
-      "Cross-Origin-Opener-Policy": "same-origin",
+      "Cross-Origin-Opener-Policy": "same-site",
     },
   },
 };
