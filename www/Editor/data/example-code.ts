@@ -71,4 +71,4 @@ mod flipper2 {
             assert_eq!(flipper2.get(), true);
         }
     }
-}`
+}`;

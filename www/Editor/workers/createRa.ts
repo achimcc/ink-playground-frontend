@@ -1,4 +1,4 @@
-import { WorldState } from "../../../pkg/wasm_demo";
+import { WorldState } from "../wasm/wasm_demo";
 
 // Create an RA Web worker
 export const createRa = async (): Promise<WorldState> => {
