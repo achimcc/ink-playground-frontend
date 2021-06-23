@@ -1,5 +1,5 @@
 import encoding from "text-encoding";
-import ClipLoader from "react-spinners/ClipLoader";
+import { ClipLoader, RingLoader } from "react-spinners";
 import { FaCheckCircle } from "react-icons/fa";
 
 import exampleCode from "./data/example-code";
@@ -44,6 +44,7 @@ const Editor: React.FC<Props> = ({
   }, []);
 
   const editor = useRef<any>();
+  const [isMonacoLoading, setIsMonacoLoading] = useState<boolean>(true);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   async function init() {
@@ -51,13 +52,14 @@ const Editor: React.FC<Props> = ({
     const monaco = await import(
       /* webpackChunkName: "monaco-editor" */ "monaco-editor/esm/vs/editor/editor.api"
     );
-    let model = monaco.editor.createModel(exampleCode);
+    let model = await monaco.editor.createModel(exampleCode);
     const myEditor = monaco.editor.create(divNode, {
       theme: isDark ? "hc-black" : "vs",
       minimap: { enabled: minimap },
       lineNumbers: numbering ? "on" : "off",
       model: model,
     });
+    setIsMonacoLoading(false);
     editor.current = myEditor;
     myEditor.updateOptions({ theme: isDark ? "vs-dark" : "vs" });
     window.onresize = () => myEditor.layout();
@@ -95,8 +97,22 @@ const Editor: React.FC<Props> = ({
           height: `${height}vh`,
           width: `${width}vw`,
           border: "1px solid black",
+          position: "relative",
         }}
-      ></div>
+      >
+        {isMonacoLoading && (
+          <div
+            style={{
+              position: "absolute",
+              left: "calc(50% - 150px)",
+              top: "calc(50% - 150px)",
+              transform: "translate(-50%, -50%)",
+            }}
+          >
+            <RingLoader size={300} color={"#3EACF2"} />
+          </div>
+        )}
+      </div>
 
       <div
         style={{
