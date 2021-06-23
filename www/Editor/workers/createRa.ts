@@ -8,7 +8,7 @@ export const createRa = async (): Promise<WorldState> => {
   let id = 1;
   let ready: (value: any) => void;
 
-  const callWorker = async (which: any, ...args: any[]) => {
+  const callWorker = async (which: any, args: any[]) => {
     return new Promise((resolve, _) => {
       pendingResolve[id] = resolve;
       worker.postMessage({
@@ -26,7 +26,7 @@ export const createRa = async (): Promise<WorldState> => {
         return Reflect.get(target, prop, _receiver);
       }
       return async (...args: any[]) => {
-        return callWorker(prop, ...Array.prototype.slice.call(args));
+        return callWorker(prop, Array.prototype.slice.call(args));
       };
     },
   };
