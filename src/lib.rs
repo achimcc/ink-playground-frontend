@@ -1,11 +1,12 @@
 #![cfg(target_arch = "wasm32")]
 #![allow(non_snake_case)]
 
-use ide::{Analysis, CompletionConfig, DiagnosticsConfig, FileId, FilePosition, Indel, TextSize};
+use ide::{Analysis, CompletionConfig, DiagnosticsConfig, FileId, FilePosition, HoverConfig, HoverDocFormat, Indel, TextSize};
 use ide_db::helpers::{
-    insert_use::{InsertUseConfig, MergeBehavior, PrefixKind},
+    insert_use::{ImportGranularity, InsertUseConfig, PrefixKind},
     SnippetCap,
 };
+pub use ide_db::assists::AssistResolveStrategy;
 use wasm_bindgen::prelude::*;
 
 mod to_proto;
@@ -61,7 +62,7 @@ impl WorldState {
 
         let diagnostics: Vec<_> = self
             .analysis
-            .diagnostics(&config, file_id)
+            .diagnostics(&config, AssistResolveStrategy::None, file_id)
             .unwrap()
             .into_iter()
             .map(|d| {
@@ -85,13 +86,17 @@ impl WorldState {
         const COMPLETION_CONFIG: CompletionConfig = CompletionConfig {
             enable_postfix_completions: true,
             enable_imports_on_the_fly: true,
+            enable_self_on_the_fly: true,
             add_call_parenthesis: true,
             add_call_argument_snippets: true,
             snippet_cap: SnippetCap::new(true),
             insert_use: InsertUseConfig {
-                merge: Some(MergeBehavior::Full),
+              //  merge: Some(MergeBehavior::Full),
+                granularity: ImportGranularity::Crate,
+                enforce_granularity: true,
                 prefix_kind: PrefixKind::Plain,
                 group: true,
+                skip_glob_imports: true,
             },
         };
 
@@ -114,7 +119,10 @@ impl WorldState {
         let line_index = self.analysis.file_line_index(self.file_id).unwrap();
 
         let pos = file_position(line_number, column, &line_index, self.file_id);
-        let info = match self.analysis.hover(pos, true, true).unwrap() {
+        let info = match self.analysis.hover(pos, &HoverConfig {
+            links_in_hover: true,
+            documentation: Some(HoverDocFormat::Markdown),
+        }).unwrap() {
             Some(info) => info,
             _ => return JsValue::NULL,
         };
