@@ -8,12 +8,14 @@ export const createRa = async (): Promise<WorldState> => {
   let id = 1;
   let ready: (value: any) => void;
 
-  const callWorker = async (which: any, args: any[]) => {
+  type Which = keyof WorldState;
+
+  const callWorker = async (which: Which, ...args: any[]) => {
     return new Promise((resolve, _) => {
       pendingResolve[id] = resolve;
       worker.postMessage({
         which: which,
-        args: args,
+        args: Array.prototype.slice.call(args),
         id: id,
       });
       id += 1;
@@ -21,12 +23,12 @@ export const createRa = async (): Promise<WorldState> => {
   };
 
   const proxyHandler = {
-    get: (target: object, prop: PropertyKey, _receiver: any) => {
+    get: (target: object, prop: Which | "then", _receiver: any) => {
       if (prop == "then") {
         return Reflect.get(target, prop, _receiver);
       }
       return async (...args: any[]) => {
-        return callWorker(prop, Array.prototype.slice.call(args));
+        return callWorker(prop, ...Array.prototype.slice.call(args));
       };
     },
   };
