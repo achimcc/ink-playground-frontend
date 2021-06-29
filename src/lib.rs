@@ -6,8 +6,7 @@ use std::sync::Arc;
 use ide::{Analysis, AnalysisHost, CompletionConfig, DiagnosticsConfig, FileId, FilePosition, HoverConfig, HoverDocFormat, Indel, TextSize};
 use ide_db::helpers::{
     insert_use::{ImportGranularity, InsertUseConfig, PrefixKind},
-    SnippetCap, 
-    merge_imports::MergeBehavior,
+    SnippetCap,
 };
 pub use ide_db::assists::AssistResolveStrategy;
 pub use ide_db::base_db::{Change, CrateGraph, CrateId, Edition, Env, FileSet, SourceRoot, VfsPath,};
@@ -78,7 +77,7 @@ pub struct WorldState {
 impl WorldState {
     #[wasm_bindgen(constructor)]
     pub fn new() -> Self {
-        let file_id = FileId(182);
+        let file_id = FileId(183);
         let analysis_host = AnalysisHost::default();
         let analysis = analysis_host.analysis();
         let analysis_host = AnalysisHost::default();
@@ -106,9 +105,10 @@ impl WorldState {
         web_sys::console::log_1(&"This worked!".into());
     }
 
-    pub fn analyze(&mut self) -> JsValue {
+    pub fn analyze(&mut self, file_id: u32) -> JsValue {
         log::warn!("analyze");
         init_panic_hook();
+        self.file_id = FileId(file_id);
         // this unblocks AnalysisHost
         let analysis_host = AnalysisHost::default();
         self.analysis = analysis_host.analysis();

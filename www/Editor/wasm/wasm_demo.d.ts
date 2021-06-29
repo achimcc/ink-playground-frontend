@@ -31,9 +31,10 @@ export class WorldState {
 */
   update(code: string): void;
 /**
+* @param {number} file_id
 * @returns {any}
 */
-  analyze(): any;
+  analyze(file_id: number): any;
 /**
 * @param {number} line_number
 * @param {number} column
@@ -135,7 +136,7 @@ export interface InitOutput {
   readonly worldstate_new: () => number;
   readonly worldstate_load: (a: number, b: number, c: number) => void;
   readonly worldstate_update: (a: number, b: number, c: number) => void;
-  readonly worldstate_analyze: (a: number) => number;
+  readonly worldstate_analyze: (a: number, b: number) => number;
   readonly worldstate_completions: (a: number, b: number, c: number) => number;
   readonly worldstate_hover: (a: number, b: number, c: number) => number;
   readonly worldstate_code_lenses: (a: number) => number;

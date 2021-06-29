@@ -16,10 +16,11 @@ log = { version = "0.4.14", features = ["release_max_level_warn"] }
 serde = { version = "1.0.125", features = ["derive"] }
 serde_json = { version = "1.0.48", features = ["preserve_order"] }
 serde_repr = "0.1.6"
-serde-wasm-bindgen = "0.1.3"
+serde-wasm-bindgen = "0.3.0"
 stacker = "0.1.13"
-wasm-bindgen = "0.2.72"
-wasm-bindgen-rayon = "1.0.2"
+wasm-bindgen = "0.2.74"
+rayon = "1.5.1"
+wasm-bindgen-rayon = "1.0.3"
 
 ide = { path = "../rust-analyzer/crates/ide" }
 ide_db = { path = "../rust-analyzer/crates/ide_db" }
