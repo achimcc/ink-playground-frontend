@@ -204,6 +204,8 @@ pub(crate) fn folding_range(fold: ide::Fold, ctx: &ide::LineIndex) -> return_typ
             ide::FoldKind::Consts => None,
             ide::FoldKind::Statics => None,
             ide::FoldKind::Array => None,
+            ide::FoldKind::WhereClause => None,
+            ide::FoldKind::ReturnType => None,
             ide::FoldKind::Region => Some(return_types::FoldingRangeKind::Region),
         },
     }
