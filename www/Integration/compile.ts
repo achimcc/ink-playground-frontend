@@ -59,7 +59,7 @@ export function performCompile(
   });
 }
 
-function jsonPost(urlObj: url.UrlObject, body: unknown) {
+function jsonPost(urlObj: url.UrlObject, body: ExecuteRequestBody) {
   const urlStr = url.format(urlObj);
 
   return fetchJson(urlStr, {
@@ -68,7 +68,7 @@ function jsonPost(urlObj: url.UrlObject, body: unknown) {
   });
 }
 
-async function fetchJson(url: any, args: any) {
+async function fetchJson(url: string, args: any): Promise<Response> {
   const { headers = {} } = args;
   headers["Content-Type"] = "application/json";
 
@@ -82,7 +82,7 @@ async function fetchJson(url: any, args: any) {
     };
   }
 
-  let body;
+  let body: Response;
   try {
     body = await response.json();
   } catch (convertError) {
