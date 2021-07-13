@@ -37,7 +37,6 @@ dependencies = [
  "profile",
  "rustc-hash",
  "salsa",
- "serde",
  "stdx",
  "syntax",
  "test_utils",
@@ -68,7 +67,6 @@ name = "cfg"
 version = "0.0.0"
 dependencies = [
  "rustc-hash",
- "serde",
  "tt",
 ]
 
@@ -284,6 +282,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d7afe4a420e3fe79967a00898cc1f4db7c8a49a9333a29f8a4bd76a253d5cd04"
 
 [[package]]
+name = "hashbrown"
+version = "0.11.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ab5ef0d4909ef3724cc8cce6ccc8572c5c817592e9285f5464f8e86f8bd3726e"
+
+[[package]]
 name = "heck"
 version = "0.3.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -363,7 +367,6 @@ dependencies = [
  "parser",
  "profile",
  "rustc-hash",
- "serde",
  "syntax",
  "tt",
 ]
@@ -524,7 +527,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "824845a0bf897a9042383849b02c1bc219c2383772efcd5c6f9766fa4b81aef3"
 dependencies = [
  "autocfg",
- "hashbrown",
+ "hashbrown 0.9.1",
 ]
 
 [[package]]
@@ -698,9 +701,6 @@ dependencies = [
 [[package]]
 name = "paths"
 version = "0.0.0"
-dependencies = [
- "serde",
-]
 
 [[package]]
 name = "percent-encoding"
@@ -839,12 +839,12 @@ dependencies = [
 
 [[package]]
 name = "rowan"
-version = "0.13.0-pre.6"
+version = "0.13.0-pre.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "82ccc04e145e9a5ab51b9c12a81d77c4a8250d87a407ab02ac650451141ff00d"
+checksum = "e9a7c0b71a45f8ba80c74d55a7d4b3ec611042d3b98ee56835b6af7b5e9f3f83"
 dependencies = [
  "countme",
- "hashbrown",
+ "hashbrown 0.11.2",
  "memoffset",
  "rustc-hash",
  "text-size",
@@ -1198,7 +1198,6 @@ dependencies = [
  "indexmap",
  "paths",
  "rustc-hash",
- "serde",
 ]
 
 [[package]]
