@@ -1,4 +1,6 @@
-import { CompileConfig } from "./types";
+import { CompileConfig, CompileRequest } from "./types";
+import url from "url";
+import fetch from "isomorphic-fetch";
 
 interface ExecuteRequestBody {
   channel: string;
@@ -38,13 +40,13 @@ const routes = {
   },
 };
 
-export function performCompile(
-  config: CompileConfig,
-  crateType: string,
-  backtrace: boolean,
-  target: string,
-  code: string
-): void {
+export function performCompile({
+  config,
+  crateType,
+  backtrace,
+  target,
+  code,
+}: CompileRequest): Promise<Response> {
   const tests = false;
   const body: CompileRequestBody = {
     ...config,
@@ -54,14 +56,17 @@ export function performCompile(
     target,
     code,
   };
-  const respone = jsonPost(routes.compile, body).catch((json) => {
+  console.log("starting json post!");
+  const response = jsonPost(routes.compile, body).catch((json) => {
     throw new Error(`json post error: ${json.error}`);
   });
+  return response;
 }
 
 function jsonPost(urlObj: url.UrlObject, body: ExecuteRequestBody) {
+  console.log("obntaining url:");
   const urlStr = url.format(urlObj);
-
+  console.log("urlStr: ", urlStr);
   return fetchJson(urlStr, {
     method: "post",
     body: JSON.stringify(body),
@@ -69,6 +74,7 @@ function jsonPost(urlObj: url.UrlObject, body: ExecuteRequestBody) {
 }
 
 async function fetchJson(url: string, args: any): Promise<Response> {
+  console.log("at fetchJson!");
   const { headers = {} } = args;
   headers["Content-Type"] = "application/json";
 

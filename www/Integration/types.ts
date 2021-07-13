@@ -134,3 +134,11 @@ export type CompileConfig = {
   demangleAssembly: DemangleAssembly;
   processAssembly: ProcessAssembly;
 };
+
+export type CompileRequest = {
+  config: CompileConfig;
+  crateType: string;
+  backtrace: boolean;
+  target: string;
+  code: string;
+};

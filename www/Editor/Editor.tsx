@@ -56,6 +56,7 @@ const Editor: React.FC<Props> = ({
       /* webpackChunkName: "monaco-editor" */ "monaco-editor/esm/vs/editor/editor.api"
     );
     let model = await monaco.editor.createModel(exampleCode);
+    setUri(model.uri);
     const myEditor = monaco.editor.create(divNode, {
       theme: isDark ? "hc-black" : "vs",
       minimap: { enabled: minimap },
@@ -68,7 +69,6 @@ const Editor: React.FC<Props> = ({
     window.onresize = () => myEditor.layout();
     await startRustAnalyzer(monaco, model);
     setIsLoading(false);
-    setUri(model.uri);
   }
 
   useEffect(() => {

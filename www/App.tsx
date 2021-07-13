@@ -1,7 +1,36 @@
 import React, { useState } from "react";
 import Editor from "./Editor/Editor";
-import { performCompile } from "Integration/compile";
+import { performCompile } from "./Integration/compile";
+import {
+  CompileRequest,
+  CompileConfig,
+  Channel,
+  Mode,
+  Edition,
+  AssemblyFlavor,
+  DemangleAssembly,
+  ProcessAssembly,
+} from "./Integration/types";
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
+
+const parseRequest = (code: string): CompileRequest => {
+  const config: CompileConfig = {
+    channel: Channel.Stable,
+    mode: Mode.Release,
+    edition: Edition.Rust2018,
+    assemblyFlavor: AssemblyFlavor.Att,
+    demangleAssembly: DemangleAssembly.Demangle,
+    processAssembly: ProcessAssembly.Filter,
+  };
+  const request: CompileRequest = {
+    config,
+    crateType: "bin",
+    backtrace: false,
+    target: "asm",
+    code,
+  };
+  return request;
+};
 
 function App() {
   const [isDark, setIsDark] = useState(true);
@@ -13,6 +42,11 @@ function App() {
   const toggleNumbering = () => setNumbering((value) => !value);
   const requestCompile = () => {
     const model = monaco.editor.getModel(uri as any);
+    const code = model?.getValue() as string;
+    const request = parseRequest(code);
+    performCompile(request).then((response) =>
+      console.log("response: ", response)
+    );
     console.log("compile! ", model?.getValue());
   };
   return (
