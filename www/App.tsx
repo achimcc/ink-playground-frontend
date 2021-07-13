@@ -1,13 +1,20 @@
 import React, { useState } from "react";
 import Editor from "./Editor/Editor";
+import { performCompile } from "Integration/compile";
+import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 
 function App() {
   const [isDark, setIsDark] = useState(true);
   const [minimap, setMinimap] = useState(false);
   const [numbering, setNumbering] = useState(false);
+  const [uri, setUri] = useState();
   const toggleDark = () => setIsDark((value) => !value);
   const toggleMinimap = () => setMinimap((value) => !value);
   const toggleNumbering = () => setNumbering((value) => !value);
+  const requestCompile = () => {
+    const model = monaco.editor.getModel(uri as any);
+    console.log("compile! ", model?.getValue());
+  };
   return (
     <div className="App">
       <header className="App-header" style={{ textAlign: "center" }}>
@@ -27,6 +34,7 @@ function App() {
           <button onClick={toggleDark}>Toggle Dark Mode</button>
           <button onClick={toggleMinimap}>Toggle Minimap</button>
           <button onClick={toggleNumbering}>Toggle Numbering</button>
+          <button onClick={requestCompile}>Compile</button>
         </div>
         <Editor
           width={50}
@@ -34,6 +42,7 @@ function App() {
           isDark={isDark}
           minimap={minimap}
           numbering={numbering}
+          setUri={setUri}
         />
       </div>
     </div>

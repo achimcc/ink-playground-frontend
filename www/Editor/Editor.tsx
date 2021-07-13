@@ -14,6 +14,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import React from "react";
 
 import { startRustAnalyzer } from "./utils/startRustAnalyzer";
+import { Module } from "webpack";
 
 const modeId = "ra-rust"; // not "rust" to circumvent conflict
 (window as any).MonacoEnvironment = {
@@ -27,6 +28,7 @@ interface Props {
   minimap?: boolean;
   numbering?: boolean;
   isDark?: boolean;
+  setUri?: (uri: any) => void;
 }
 
 const Editor: React.FC<Props> = ({
@@ -35,6 +37,7 @@ const Editor: React.FC<Props> = ({
   minimap = false,
   numbering = false,
   isDark = true,
+  setUri = (uri: any) => null,
 }: Props) => {
   console.log("start rendering!");
   let divNode: any;
@@ -65,6 +68,7 @@ const Editor: React.FC<Props> = ({
     window.onresize = () => myEditor.layout();
     await startRustAnalyzer(monaco, model);
     setIsLoading(false);
+    setUri(model.uri);
   }
 
   useEffect(() => {
