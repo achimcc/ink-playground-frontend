@@ -1,6 +1,16 @@
-import { CompileConfig, CompileRequest } from "./types";
 import url from "url";
 import fetch from "isomorphic-fetch";
+
+import {
+  CompileRequest,
+  CompileConfig,
+  Channel,
+  Mode,
+  Edition,
+  AssemblyFlavor,
+  DemangleAssembly,
+  ProcessAssembly,
+} from "./types";
 
 interface ExecuteRequestBody {
   channel: string;
@@ -63,20 +73,22 @@ export function performCompile({
   return response;
 }
 
-function jsonPost(urlObj: url.UrlObject, body: ExecuteRequestBody) {
+function jsonPost(urlObj: any, body: ExecuteRequestBody) {
   console.log("obntaining url:");
   const urlStr = url.format(urlObj);
-  console.log("urlStr: ", urlStr);
+  console.log("body: ", body);
   return fetchJson(urlStr, {
     method: "post",
     body: JSON.stringify(body),
+    //   mode: "no-cors",
   });
 }
 
 async function fetchJson(url: string, args: any): Promise<Response> {
-  console.log("at fetchJson!");
+  console.log("at fetchJson! url: ", url);
   const { headers = {} } = args;
   headers["Content-Type"] = "application/json";
+  url = "http://jellyfin.codingconnects.com:5000/compile";
 
   let response;
   try {
@@ -104,4 +116,39 @@ async function fetchJson(url: string, args: any): Promise<Response> {
     // HTTP 4xx, 5xx (e.g. malformed JSON request)
     throw body;
   }
+}
+
+export const parseRequest = (code: string): CompileRequest => {
+  const config: CompileConfig = {
+    channel: Channel.Stable,
+    mode: Mode.Release,
+    edition: Edition.Rust2018,
+    assemblyFlavor: AssemblyFlavor.Att,
+    demangleAssembly: DemangleAssembly.Demangle,
+    processAssembly: ProcessAssembly.Filter,
+  };
+  const request: CompileRequest = {
+    config,
+    crateType: "lib",
+    backtrace: false,
+    target: "contract",
+    code,
+  };
+  return request;
+};
+
+export function downloadBlob(code: any) {
+  var blob = new Blob([new Uint8Array(code).buffer]);
+
+  var a = document.createElement("a");
+  a.download = "result.contract";
+  a.href = URL.createObjectURL(blob);
+  a.dataset.downloadurl = ["application/json", a.download, a.href].join(":");
+  a.style.display = "none";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(function () {
+    URL.revokeObjectURL(a.href);
+  }, 1500);
 }

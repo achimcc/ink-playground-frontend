@@ -1,36 +1,11 @@
 import React, { useState } from "react";
 import Editor from "./Editor/Editor";
-import { performCompile } from "./Integration/compile";
 import {
-  CompileRequest,
-  CompileConfig,
-  Channel,
-  Mode,
-  Edition,
-  AssemblyFlavor,
-  DemangleAssembly,
-  ProcessAssembly,
-} from "./Integration/types";
+  performCompile,
+  parseRequest,
+  downloadBlob,
+} from "./Integration/compile";
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
-
-const parseRequest = (code: string): CompileRequest => {
-  const config: CompileConfig = {
-    channel: Channel.Stable,
-    mode: Mode.Release,
-    edition: Edition.Rust2018,
-    assemblyFlavor: AssemblyFlavor.Att,
-    demangleAssembly: DemangleAssembly.Demangle,
-    processAssembly: ProcessAssembly.Filter,
-  };
-  const request: CompileRequest = {
-    config,
-    crateType: "bin",
-    backtrace: false,
-    target: "asm",
-    code,
-  };
-  return request;
-};
 
 function App() {
   const [isDark, setIsDark] = useState(true);
@@ -44,10 +19,10 @@ function App() {
     const model = monaco.editor.getModel(uri as any);
     const code = model?.getValue() as string;
     const request = parseRequest(code);
-    performCompile(request).then((response) =>
-      console.log("response: ", response)
-    );
-    console.log("compile! ", model?.getValue());
+    performCompile(request).then((response) => {
+      console.log("body: ", (response as any).code);
+      downloadBlob((response as any).code);
+    });
   };
   return (
     <div className="App">
