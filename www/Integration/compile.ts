@@ -88,7 +88,7 @@ async function fetchJson(url: string, args: any): Promise<Response> {
   console.log("at fetchJson! url: ", url);
   const { headers = {} } = args;
   headers["Content-Type"] = "application/json";
-  url = "http://jellyfin.codingconnects.com:5000/compile";
+  url = "https://codingconnects.de/compile";
 
   let response;
   try {
