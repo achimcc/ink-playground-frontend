@@ -66,17 +66,19 @@ export function performCompile({
     target,
     code,
   };
-  console.log("starting json post!");
   const response = jsonPost(routes.compile, body).catch((json) => {
     throw new Error(`json post error: ${json.error}`);
   });
   return response;
 }
 
+const buildEndpoint = (urlObj: any): string => {
+  const URL = "https://codingconnects.de";
+  return `${URL}${urlObj.pathname}`;
+};
+
 function jsonPost(urlObj: any, body: ExecuteRequestBody) {
-  console.log("obntaining url:");
-  const urlStr = url.format(urlObj);
-  console.log("body: ", body);
+  const urlStr = buildEndpoint(urlObj);
   return fetchJson(urlStr, {
     method: "post",
     body: JSON.stringify(body),
@@ -85,10 +87,8 @@ function jsonPost(urlObj: any, body: ExecuteRequestBody) {
 }
 
 async function fetchJson(url: string, args: any): Promise<Response> {
-  console.log("at fetchJson! url: ", url);
   const { headers = {} } = args;
   headers["Content-Type"] = "application/json";
-  url = "https://codingconnects.de/compile";
 
   let response;
   try {

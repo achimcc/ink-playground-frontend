@@ -20,7 +20,6 @@ function App() {
     const code = model?.getValue() as string;
     const request = parseRequest(code);
     performCompile(request).then((response) => {
-      console.log("body: ", (response as any).code);
       downloadBlob((response as any).code);
     });
   };

@@ -51,7 +51,6 @@ const Editor: React.FC<Props> = ({
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   async function init() {
-    console.log("getting monaco");
     const monaco = await import(
       /* webpackChunkName: "monaco-editor" */ "monaco-editor/esm/vs/editor/editor.api"
     );
