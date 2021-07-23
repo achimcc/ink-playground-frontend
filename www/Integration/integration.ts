@@ -77,7 +77,7 @@ export function performGistSave(code: string) {
 }
 
 const buildEndpoint = (urlObj: any): string => {
-  const URL = "http://localhost:5000";
+  const URL = "https://codingconnects.de";
   return `${URL}${urlObj.pathname}`;
 };
 
