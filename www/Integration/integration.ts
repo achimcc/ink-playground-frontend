@@ -1,4 +1,3 @@
-import url from "url";
 import fetch from "isomorphic-fetch";
 
 import {
@@ -72,12 +71,31 @@ export function performCompile({
   return response;
 }
 
+export function performGistSave(code: string) {
+  return jsonPost(routes.meta.gist, { code }).then((json) => console.log(json));
+  // TODO: Failure case
+}
+
 const buildEndpoint = (urlObj: any): string => {
-  const URL = "https://codingconnects.de";
+  const URL = "http://localhost:5000";
   return `${URL}${urlObj.pathname}`;
 };
 
-function jsonPost(urlObj: any, body: ExecuteRequestBody) {
+export async function performGistLoad(id: string) {
+  console.log("get gist from id: ", id);
+  const pathname = `${routes.meta.gist.pathname}${id}`;
+  const url = buildEndpoint({ pathname });
+  return jsonGet(url).then((response) => (response as any).code as string);
+}
+
+function jsonGet(urlStr: any) {
+  console.log("fetching from: ", urlStr);
+  return fetchJson(urlStr, {
+    method: "get",
+  });
+}
+
+function jsonPost(urlObj: any, body: any) {
   const urlStr = buildEndpoint(urlObj);
   return fetchJson(urlStr, {
     method: "post",

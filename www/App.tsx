@@ -1,13 +1,26 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Editor from "./Editor/Editor";
 import {
   performCompile,
   parseRequest,
   downloadBlob,
-} from "./Integration/compile";
+  performGistSave,
+  performGistLoad,
+} from "./Integration/integration";
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 
 function App() {
+  useEffect(() => {
+    const queryParams = new URLSearchParams(window.location.search);
+    const id = queryParams.get("id");
+    console.log("query id: ", id);
+    if (id) {
+      performGistLoad(id).then((response) => {
+        const model = monaco.editor.getModel(uri as any);
+        model?.setValue(response);
+      });
+    }
+  });
   const [isDark, setIsDark] = useState(true);
   const [minimap, setMinimap] = useState(false);
   const [numbering, setNumbering] = useState(false);
@@ -21,6 +34,13 @@ function App() {
     const request = parseRequest(code);
     performCompile(request).then((response) => {
       downloadBlob((response as any).code);
+    });
+  };
+  const requestShare = () => {
+    const model = monaco.editor.getModel(uri as any);
+    const code = model?.getValue() as string;
+    performGistSave(code).then((response) => {
+      console.log("response: ", response);
     });
   };
   return (
@@ -43,6 +63,7 @@ function App() {
           <button onClick={toggleMinimap}>Toggle Minimap</button>
           <button onClick={toggleNumbering}>Toggle Numbering</button>
           <button onClick={requestCompile}>Compile</button>
+          <button onClick={requestShare}>Share</button>
         </div>
         <Editor
           width={50}
