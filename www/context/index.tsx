@@ -112,6 +112,10 @@ export const PlaygroundContextProvider = ({
     await performCompile(request)
       .then((response) => {
         console.log("response: ", response);
+        dispatch({
+          type: "SET_COMPILING",
+          payload: false,
+        });
         const code = (response as any).code as Blob;
         const success = (response as any).success as boolean;
         if (!success) {
@@ -139,10 +143,6 @@ export const PlaygroundContextProvider = ({
           dispatch({
             type: "SET_BLOB",
             payload: code,
-          });
-          dispatch({
-            type: "SET_COMPILING",
-            payload: false,
           });
         }
       })
