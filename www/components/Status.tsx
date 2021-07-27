@@ -16,7 +16,7 @@ const Status = () => {
   }, [messages]);
   return (
     <div id="message_scroll" style={{ height: "100%", overflowY: "scroll" }}>
-      <h1>Status:</h1>
+      <h3>Status:</h3>
       <Messages ref={msgs1} />
     </div>
   );
