@@ -92,6 +92,7 @@ export const PlaygroundContextProvider = ({
   const [state, dispatch] = useReducer(appReducer, INIT_STATE);
 
   const requestCompile = async () => {
+    if (state.isCompiling) return;
     dispatch({
       type: "SET_COMPILING",
       payload: true,
