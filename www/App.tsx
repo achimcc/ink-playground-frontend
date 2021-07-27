@@ -47,7 +47,7 @@ function App() {
               <Splitter layout="vertical">
                 <SplitterPanel
                   className="p-d-flex p-ai-center p-jc-center"
-                  size={60}
+                  size={50}
                 >
                   <div>
                     <TabView
@@ -67,7 +67,7 @@ function App() {
                   </div>
                 </SplitterPanel>
                 <SplitterPanel
-                  size={40}
+                  size={50}
                   style={{ minHeight: 0, overflowY: "scroll" }}
                 >
                   <div className="ink-terminal" id="message_div">
