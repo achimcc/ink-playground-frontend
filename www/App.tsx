@@ -70,7 +70,7 @@ function App() {
                   size={40}
                   style={{ minHeight: 0, overflowY: "scroll" }}
                 >
-                  <div className="ink-terminal">
+                  <div className="ink-terminal" id="message_div">
                     <Status />
                   </div>
                 </SplitterPanel>

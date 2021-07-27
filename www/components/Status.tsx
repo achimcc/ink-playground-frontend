@@ -7,6 +7,8 @@ const Status = () => {
   const { messages } = usePlayground();
   useEffect(() => {
     (msgs1 as any).current.show(messages);
+    const objDiv = document.getElementById("message_div")?.parentElement;
+    if (objDiv) objDiv.scrollTop = objDiv.scrollHeight;
   }, [messages]);
   return (
     <div>
