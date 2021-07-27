@@ -4,12 +4,13 @@ const HtmlWebPackPlugin = require("html-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const BundleAnalyzerPlugin =
   require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
   mode: "production",
   entry: {
     app: "./index.tsx",
-    ra: "./Editor/workers/ra-worker.ts",
+    ra: "./components/Editor/workers/ra-worker.ts",
   },
   module: {
     rules: [
@@ -25,6 +26,15 @@ module.exports = {
         test: /\.tsx?$/,
         use: "ts-loader",
         exclude: ["/node_modules/", "/workers/"],
+      },
+      {
+        test: /\.(png|gif|woff|woff2|eot|ttf|svg)$/,
+        use: {
+          loader: "url-loader",
+          options: {
+            limit: 100000,
+          },
+        },
       },
       // Handle our worker
     ],
@@ -45,6 +55,7 @@ module.exports = {
     path: path.resolve(__dirname, "dist"),
   },
   plugins: [
+    new MiniCssExtractPlugin(),
     new HtmlWebPackPlugin({
       title: "Rust Analyzer",
       template: "./index.html",
@@ -55,7 +66,7 @@ module.exports = {
       languages: ["rust"],
     }),
     new CopyWebpackPlugin({
-      patterns: [{ from: "Editor/data" }],
+      patterns: [{ from: "components/Editor/data" }],
     }),
     // new BundleAnalyzerPlugin(),
   ],

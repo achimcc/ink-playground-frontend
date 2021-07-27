@@ -1,4 +1,5 @@
 import fetch from "isomorphic-fetch";
+import { BACKEND_URL } from "../config/constants";
 
 import {
   CompileRequest,
@@ -72,13 +73,14 @@ export function performCompile({
 }
 
 export function performGistSave(code: string) {
-  return jsonPost(routes.meta.gist, { code }).then((json) => console.log(json));
+  return jsonPost(routes.meta.gist, { code });
   // TODO: Failure case
 }
 
 const buildEndpoint = (urlObj: any): string => {
-  const URL = "https://codingconnects.de";
-  return `${URL}${urlObj.pathname}`;
+  // const URL = "https://codingconnects.de";
+  // const URL = "http://127.0.0.1:5000";
+  return `${BACKEND_URL}${urlObj.pathname}`;
 };
 
 export async function performGistLoad(id: string) {

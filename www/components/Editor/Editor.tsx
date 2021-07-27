@@ -12,6 +12,7 @@ if (typeof TextEncoder === "undefined") {
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import React from "react";
+import { usePlayground } from "../../context";
 
 import { startRustAnalyzer } from "./utils/startRustAnalyzer";
 import { Module } from "webpack";
@@ -23,22 +24,10 @@ const modeId = "ra-rust"; // not "rust" to circumvent conflict
   },
 };
 interface Props {
-  width: number;
   height: number;
-  minimap?: boolean;
-  numbering?: boolean;
-  isDark?: boolean;
-  setUri?: (uri: any) => void;
 }
 
-const Editor: React.FC<Props> = ({
-  width,
-  height,
-  minimap = false,
-  numbering = false,
-  isDark = true,
-  setUri = (uri: any) => null,
-}: Props) => {
+const Editor: React.FC<Props> = ({ height }: Props) => {
   console.log("start rendering!");
   let divNode: any;
   const assignRef = useCallback((node) => {
@@ -47,6 +36,7 @@ const Editor: React.FC<Props> = ({
   }, []);
 
   const editor = useRef<any>();
+  const { isDarkMode, isMiniMap, isNumbering, dispatch } = usePlayground();
   const [isMonacoLoading, setIsMonacoLoading] = useState<boolean>(true);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -55,19 +45,29 @@ const Editor: React.FC<Props> = ({
       /* webpackChunkName: "monaco-editor" */ "monaco-editor/esm/vs/editor/editor.api"
     );
     let model = await monaco.editor.createModel(exampleCode);
-    setUri(model.uri);
+    dispatch({ type: "SET_URI", payload: model.uri });
     const myEditor = monaco.editor.create(divNode, {
-      theme: isDark ? "hc-black" : "vs",
-      minimap: { enabled: minimap },
-      lineNumbers: numbering ? "on" : "off",
+      theme: isDarkMode ? "hc-black" : "vs",
+      minimap: { enabled: isMiniMap },
+      lineNumbers: isNumbering ? "on" : "off",
       model: model,
+      automaticLayout: true,
     });
     setIsMonacoLoading(false);
     editor.current = myEditor;
-    myEditor.updateOptions({ theme: isDark ? "vs-dark" : "vs" });
+    myEditor.updateOptions({ theme: isDarkMode ? "vs-dark" : "vs" });
     window.onresize = () => myEditor.layout();
     await startRustAnalyzer(monaco, model);
     setIsLoading(false);
+    dispatch({
+      type: "LOG_MESSAGE",
+      payload: {
+        severity: "success",
+        summary: `Rust Analyzer Ready!`,
+        detail: ``,
+        sticky: true,
+      },
+    });
   }
 
   useEffect(() => {
@@ -78,18 +78,18 @@ const Editor: React.FC<Props> = ({
 
   useEffect(() => {
     // @ts-ignore
-    editor.current?.updateOptions({ theme: isDark ? "vs-dark" : "vs" });
-  }, [isDark, editor]);
+    editor.current?.updateOptions({ theme: isDarkMode ? "vs-dark" : "vs" });
+  }, [isDarkMode, editor]);
 
   useEffect(() => {
     // @ts-ignore
-    editor.current?.updateOptions({ minimap: { enabled: minimap } });
-  }, [minimap, editor]);
+    editor.current?.updateOptions({ minimap: { enabled: isMiniMap } });
+  }, [isMiniMap, editor]);
 
   useEffect(() => {
     // @ts-ignore
-    editor.current?.updateOptions({ lineNumbers: numbering ? "on" : "off" });
-  }, [numbering, editor]);
+    editor.current?.updateOptions({ lineNumbers: isNumbering ? "on" : "off" });
+  }, [isNumbering, editor]);
 
   return (
     <>
@@ -98,7 +98,8 @@ const Editor: React.FC<Props> = ({
         ref={assignRef}
         style={{
           height: `${height}vh`,
-          width: `${width}vw`,
+          width: "100%",
+          minWidth: 0,
           border: "1px solid black",
           position: "relative",
         }}
@@ -119,7 +120,8 @@ const Editor: React.FC<Props> = ({
 
       <div
         style={{
-          width: `${width}vw`,
+          width: "100%",
+          minWidth: 0,
           border: "1px solid black",
           display: "table",
         }}
