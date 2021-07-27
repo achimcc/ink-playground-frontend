@@ -60,7 +60,7 @@ const Compile = () => {
             >
               <div style={{ display: "table" }}>
                 <div style={{ display: "table-cell", verticalAlign: "middle" }}>
-                  contract.contract
+                  result.contract
                 </div>
                 <div style={{ display: "table-cell", paddingLeft: "1em" }}>
                   <Button
