@@ -59,6 +59,7 @@ const Share = () => {
             closable: false,
           },
         });
+        setLoading(false);
       });
   };
   return (
