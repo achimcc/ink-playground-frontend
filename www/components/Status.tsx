@@ -8,10 +8,11 @@ const Status = () => {
   useEffect(() => {
     (msgs1 as any).current.show(messages);
     const objDiv = document.getElementById("message_div")?.parentElement;
-    if (objDiv) objDiv.scrollTop = objDiv.scrollHeight;
+    console.log("objDiv: ", objDiv);
+    if (objDiv) objDiv.scrollTop = objDiv.scrollHeight - objDiv.clientHeight;
   }, [messages]);
   return (
-    <div>
+    <div style={{ height: "100%", overflowY: "scroll" }}>
       <h1>Status:</h1>
       <Messages ref={msgs1} />
     </div>

@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 
-import { performGistSave } from "../../integration/integration";
+import { performGistSave } from "../integration/integration";
 import { Divider } from "primereact/divider";
 import { Fieldset } from "primereact/fieldset";
 
-import { usePlayground } from "../../context";
+import { usePlayground } from "../context";
 import { Card } from "primereact/card";
 import { Button } from "primereact/button";
-import { PLAYGROUND_URL } from "../../config/constants";
+import { PLAYGROUND_URL } from "../config/constants";
 
 const Share = () => {
   const { uri, dispatch, playgroundUrl, gistUrl, gistId } = usePlayground();

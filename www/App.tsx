@@ -40,7 +40,10 @@ function App() {
               <Editor height={90} />
             </SplitterPanel>
             <SplitterPanel size={40}>
-              <Splitter layout="vertical">
+              <Splitter
+                layout="vertical"
+                style={{ height: "90vh", maxHeight: "90vh" }}
+              >
                 <SplitterPanel
                   className="p-d-flex p-ai-center p-jc-center"
                   size={50}
@@ -62,10 +65,7 @@ function App() {
                     </TabView>
                   </div>
                 </SplitterPanel>
-                <SplitterPanel
-                  size={50}
-                  style={{ minHeight: 0, overflowY: "scroll" }}
-                >
+                <SplitterPanel size={50} style={{ minHeight: 0 }}>
                   <div className="ink-terminal" id="message_div">
                     <Status />
                   </div>
