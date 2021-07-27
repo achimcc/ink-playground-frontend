@@ -5,7 +5,6 @@ import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 import { Splitter, SplitterPanel } from "primereact/splitter";
-import { TerminalService } from "primereact/terminalservice";
 import "./inkTerminal.css";
 import { TabView, TabPanel } from "primereact/tabview";
 import { Settings, Compile, Editor, Share, Status } from "./components";
@@ -15,9 +14,6 @@ function App() {
   useEffect(() => {
     const queryParams = new URLSearchParams(window.location.search);
     const id = queryParams.get("id");
-    TerminalService.on("command", (text: any) =>
-      TerminalService.emit("response", `Hey There! ${text}`)
-    );
     if (id) {
       performGistLoad(id).then((response) => {
         const model = monaco.editor.getModel(uri as any);
