@@ -7,12 +7,15 @@ const Status = () => {
   const { messages } = usePlayground();
   useEffect(() => {
     (msgs1 as any).current.show(messages);
-    const objDiv = document.getElementById("message_div")?.parentElement;
-    console.log("objDiv: ", objDiv);
-    if (objDiv) objDiv.scrollTop = objDiv.scrollHeight - objDiv.clientHeight;
+    const objDiv = document.getElementById("message_scroll");
+    if (objDiv) {
+      setTimeout(() => {
+        objDiv.scrollTop = objDiv.scrollHeight - objDiv.clientHeight;
+      }, 500);
+    }
   }, [messages]);
   return (
-    <div style={{ height: "100%", overflowY: "scroll" }}>
+    <div id="message_scroll" style={{ height: "100%", overflowY: "scroll" }}>
       <h1>Status:</h1>
       <Messages ref={msgs1} />
     </div>
