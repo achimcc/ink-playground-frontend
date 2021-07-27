@@ -1,10 +1,6 @@
 import React, { useReducer, useEffect, useContext } from "react";
 import type { Reducer } from "react";
-import {
-  downloadBlob,
-  parseRequest,
-  performCompile,
-} from "../integration/integration";
+import { parseRequest, performCompile } from "../integration/integration";
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 
 export interface PlaygroundState {
@@ -73,7 +69,6 @@ export const appReducer: Reducer<PlaygroundState, PlaygroundAction> = (
     case "SET_URI":
       return { ...state, uri: action.payload };
     case "SET_GIST": {
-      console.log("set gist: ", action.payload);
       return { ...state, ...action.payload };
     }
     case "SET_BLOB": {
@@ -96,8 +91,6 @@ export const PlaygroundContextProvider = ({
 }: React.PropsWithChildren<Partial<PlaygroundState>>) => {
   const [state, dispatch] = useReducer(appReducer, INIT_STATE);
 
-  // const { isDarkMode, isNumbering, isMiniMap } = state;
-
   const requestCompile = async () => {
     dispatch({
       type: "SET_COMPILING",
@@ -113,6 +106,7 @@ export const PlaygroundContextProvider = ({
         summary: "Starting compilation",
         detail: ``,
         sticky: true,
+        closable: false,
       },
     });
     await performCompile(request)

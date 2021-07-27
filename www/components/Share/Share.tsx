@@ -24,27 +24,42 @@ const Share = () => {
         summary: "Creating Gist...",
         detail: ``,
         sticky: true,
+        closable: false,
       },
     });
-    performGistSave(code).then((response) => {
-      console.log("response: ", response);
-      const { id: gistId = null, url: gistUrl = null } = response as any;
-      const playgroundUrl = `${PLAYGROUND_URL}/?id=${gistId}`;
-      dispatch({
-        type: "LOG_MESSAGE",
-        payload: {
-          severity: "success",
-          detail: `Url to Gist: ${gistUrl} <br> \n Link to Playground: ${gistId}`,
-          summary: `Published`,
-          sticky: true,
-        },
+    performGistSave(code)
+      .then((response) => {
+        console.log("response: ", response);
+        const { id: gistId = null, url: gistUrl = null } = response as any;
+        const playgroundUrl = `${PLAYGROUND_URL}/?id=${gistId}`;
+        dispatch({
+          type: "LOG_MESSAGE",
+          payload: {
+            severity: "success",
+            detail: `Url to Gist: ${gistUrl} <br> \n Link to Playground: ${gistId}`,
+            summary: `Published`,
+            sticky: true,
+            closable: false,
+          },
+        });
+        dispatch({
+          type: "SET_GIST",
+          payload: { gistId, gistUrl, playgroundUrl },
+        });
+        setLoading(false);
+      })
+      .catch((error) => {
+        dispatch({
+          type: "LOG_MESSAGE",
+          payload: {
+            severity: "error",
+            detail: `${error}`,
+            summary: `Communication Error`,
+            sticky: true,
+            closable: false,
+          },
+        });
       });
-      dispatch({
-        type: "SET_GIST",
-        payload: { gistId, gistUrl, playgroundUrl },
-      });
-      setLoading(false);
-    });
   };
   return (
     <Card

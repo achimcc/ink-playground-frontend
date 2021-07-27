@@ -66,6 +66,7 @@ const Editor: React.FC<Props> = ({ height }: Props) => {
         summary: `Rust Analyzer Ready!`,
         detail: ``,
         sticky: true,
+        closable: false,
       },
     });
   }
