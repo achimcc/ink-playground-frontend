@@ -14,6 +14,7 @@ const Share = () => {
   const { uri, dispatch, playgroundUrl, gistUrl, gistId } = usePlayground();
   const [loading, setLoading] = useState(false);
   const requestShare = () => {
+    if (loading) return;
     setLoading(true);
     const model = monaco.editor.getModel(uri as any);
     const code = model?.getValue() as string;
