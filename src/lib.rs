@@ -11,7 +11,7 @@ use ide_db::helpers::{
 pub use ide_db::assists::AssistResolveStrategy;
 pub use ide_db::base_db::{Change, CrateGraph, CrateId, Edition, Env, FileSet, SourceRoot, VfsPath,};
 use wasm_bindgen::{JsValue, prelude::*};
-
+use change_json::ChangeJson;
 mod to_proto;
 
 mod return_types;
@@ -87,7 +87,8 @@ impl WorldState {
     pub fn load(&mut self, json: String)  {
         log::warn!("update");
         init_panic_hook();
-        let change: Change = serde_json::from_str(&json).expect("`Change` deserialization must work");
+        let change: ChangeJson = serde_json::from_str(&json).expect("`Change` deserialization must work");
+        let change = change.to_change();
         self.analysis_host.apply_change(change);
     }
 
