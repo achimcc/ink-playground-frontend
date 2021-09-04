@@ -116,12 +116,7 @@ version = "0.1.0"
 dependencies = [
  "ra_ap_base_db",
  "ra_ap_cfg",
- "ra_ap_hir",
- "ra_ap_ide",
- "ra_ap_ide_db",
- "ra_ap_proc_macro_api",
  "ra_ap_tt",
- "ra_ap_vfs",
  "serde",
 ]
 
@@ -350,12 +345,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "dd25036021b0de88a0aff6b850051563c6516d0bf53f8638938edbb9de732736"
 
 [[package]]
-name = "jod-thread"
-version = "0.1.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8b23360e99b8717f20aaa4598f5a6541efbe30630039fbc7706cf954a87947ae"
-
-[[package]]
 name = "js-sys"
 version = "0.3.51"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -395,6 +384,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "lsp-types"
+version = "0.89.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "852e0dedfd52cc32325598b2631e0eba31b7b708959676a9f837042f276b09a2"
+dependencies = [
+ "bitflags",
+ "serde",
+ "serde_json",
+ "serde_repr",
+ "url",
+]
+
+[[package]]
 name = "matches"
 version = "0.1.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -405,15 +407,6 @@ name = "memchr"
 version = "2.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "308cc39be01b73d0d18f82a0e7b2a3df85245f84af96fdddc5d202d27e47b86a"
-
-[[package]]
-name = "memmap2"
-version = "0.3.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "00b6c2ebff6180198788f5db08d7ce3bc1d0b617176678831a7510825973e357"
-dependencies = [
- "libc",
-]
 
 [[package]]
 name = "memoffset"
@@ -441,15 +434,6 @@ checksum = "05499f3756671c15885fee9034446956fff3f243d6077b91e5767df161f766b3"
 dependencies = [
  "hermit-abi",
  "libc",
-]
-
-[[package]]
-name = "object"
-version = "0.26.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "39f37e50073ccad23b6d09bcb5b263f4e76d3bb6038e4a3c08e52162ffa8abc2"
-dependencies = [
- "memchr",
 ]
 
 [[package]]
@@ -881,26 +865,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1f127378f0223b0aeb7574211e304c51991afa9e1803f8517b375741dea4eb2e"
 
 [[package]]
-name = "ra_ap_proc_macro_api"
-version = "0.0.71"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8a760014c5c353ec18948f7e118bffb1a3e8f61b1f52ae5db429ff063e0ca537"
-dependencies = [
- "crossbeam-channel",
- "jod-thread",
- "log",
- "memmap2",
- "object",
- "ra_ap_paths",
- "ra_ap_profile",
- "ra_ap_stdx",
- "ra_ap_tt",
- "serde",
- "serde_json",
- "snap",
-]
-
-[[package]]
 name = "ra_ap_profile"
 version = "0.0.71"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1169,12 +1133,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b203e79e90905594272c1c97c7af701533d42adaab0beb3859018e477d54a3b0"
 
 [[package]]
-name = "snap"
-version = "1.0.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "45456094d1983e2ee2a18fdfebce3189fa451699d0502cb8e3b49dba5ba41451"
-
-[[package]]
 name = "spmc"
 version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1318,6 +1276,7 @@ dependencies = [
  "idna",
  "matches",
  "percent-encoding",
+ "serde",
 ]
 
 [[package]]
@@ -1400,8 +1359,10 @@ dependencies = [
  "console_error_panic_hook",
  "instant",
  "log",
+ "lsp-types",
  "ra_ap_ide",
  "ra_ap_ide_db",
+ "ra_ap_syntax",
  "rayon",
  "serde",
  "serde-wasm-bindgen",

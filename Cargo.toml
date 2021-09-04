@@ -10,6 +10,7 @@ crate-type = ["cdylib"]
 
 
 [dependencies]
+lsp-types = { version = "0.89.0", features = ["proposed"] }
 console_error_panic_hook = { version = "0.1.6" }
 instant = { version = "0.1", features = ["wasm-bindgen"] }
 log = { version = "0.4.14", features = ["release_max_level_warn"] }
@@ -25,6 +26,7 @@ change_json = {path = "/home/achim/Projects/wasm/trait_extractor/crates/change_j
 
 ide_db = {package = "ra_ap_ide_db", version = "0.0.71"}
 ide = {package = "ra_ap_ide", version = "0.0.71"}
+syntax = {package = "ra_ap_syntax", version = "0.0.71"}
 
 [dependencies.web-sys]
 version = "0.3"

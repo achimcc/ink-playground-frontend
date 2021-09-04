@@ -106,12 +106,8 @@ pub(crate) fn completion_item(
         range,
         detail: item.detail().map(|it| it.to_string()),
         insertText: text,
-        insertTextRules: match item.insert_text_format() {
-            ide::InsertTextFormat::PlainText => return_types::CompletionItemInsertTextRule::None,
-            ide::InsertTextFormat::Snippet => {
-                return_types::CompletionItemInsertTextRule::InsertAsSnippet
-            }
-        },
+        //ToDo: text rules depend on item!
+        insertTextRules: return_types::CompletionItemInsertTextRule::None,
         documentation: item.documentation().map(|doc| markdown_string(doc.as_str())),
         filterText: item.lookup().to_string(),
         additionalTextEdits: additional_text_edits,

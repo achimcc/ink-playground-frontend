@@ -3,15 +3,21 @@
 
 use std::sync::Arc;
 
-use ide::{Analysis, AnalysisHost, CompletionConfig, DiagnosticsConfig, FileId, FilePosition, HoverConfig, HoverDocFormat, Indel, TextSize};
+use change_json::ChangeJson;
+use ide::{
+    Analysis, AnalysisHost, CompletionConfig, DiagnosticsConfig, FileId, FilePosition, FileRange,
+    HoverConfig, HoverDocFormat, Indel, TextSize,
+};
+pub use ide_db::assists::AssistResolveStrategy;
+pub use ide_db::base_db::{
+    Change, CrateGraph, CrateId, Edition, Env, FileSet, SourceRoot, VfsPath,
+};
 use ide_db::helpers::{
     insert_use::{ImportGranularity, InsertUseConfig, PrefixKind},
     SnippetCap,
 };
-pub use ide_db::assists::AssistResolveStrategy;
-pub use ide_db::base_db::{Change, CrateGraph, CrateId, Edition, Env, FileSet, SourceRoot, VfsPath,};
-use wasm_bindgen::{JsValue, prelude::*};
-use change_json::ChangeJson;
+use syntax::TextRange;
+use wasm_bindgen::{prelude::*, JsValue};
 mod to_proto;
 
 mod return_types;
@@ -51,7 +57,7 @@ fn derive_analytics(host: &AnalysisHost, file_id: FileId) -> JsValue {
             range: to_proto::text_range(hl.range, &line_index),
         })
         .collect();
-    web_sys::console::log_1(&"All Done!".into());  
+    web_sys::console::log_1(&"All Done!".into());
     serde_wasm_bindgen::to_value(&UpdateResult { diagnostics, highlights }).unwrap()
 }
 
@@ -69,7 +75,7 @@ pub fn init_panic_hook() {
 #[wasm_bindgen]
 pub struct WorldState {
     analysis: Analysis,
-    analysis_host: AnalysisHost, 
+    analysis_host: AnalysisHost,
     file_id: FileId,
 }
 
@@ -84,24 +90,25 @@ impl WorldState {
         Self { analysis, analysis_host, file_id }
     }
 
-    pub fn load(&mut self, json: String)  {
+    pub fn load(&mut self, json: String) {
         log::warn!("update");
         init_panic_hook();
-        let change: ChangeJson = serde_json::from_str(&json).expect("`Change` deserialization must work");
+        let change: ChangeJson =
+            serde_json::from_str(&json).expect("`Change` deserialization must work");
         let change = change.to_change();
         self.analysis_host.apply_change(change);
     }
 
-    pub fn update(&mut self, code: String)  {
+    pub fn update(&mut self, code: String) {
         log::warn!("update");
         init_panic_hook();
         let mut change = Change::new();
-        change.change_file(self.file_id, Some(Arc::new(code))); 
+        change.change_file(self.file_id, Some(Arc::new(code)));
         let analysis_host = AnalysisHost::default();
         self.analysis = analysis_host.analysis();
         web_sys::console::log_1(&"Apply Change!".into());
-        // Now its safe to apply the change! 
-        self.analysis_host.apply_change(change); 
+        // Now its safe to apply the change!
+        self.analysis_host.apply_change(change);
         self.analysis = self.analysis_host.analysis();
         web_sys::console::log_1(&"This worked!".into());
     }
@@ -130,7 +137,7 @@ impl WorldState {
             add_call_argument_snippets: true,
             snippet_cap: SnippetCap::new(true),
             insert_use: InsertUseConfig {
-              //  merge: Some(MergeBehavior::Full),
+                //  merge: Some(MergeBehavior::Full),
                 granularity: ImportGranularity::Crate,
                 enforce_granularity: true,
                 prefix_kind: PrefixKind::Plain,
@@ -157,11 +164,23 @@ impl WorldState {
         log::warn!("hover");
         let line_index = self.analysis.file_line_index(self.file_id).unwrap();
 
-        let pos = file_position(line_number, column, &line_index, self.file_id);
-        let info = match self.analysis.hover(pos, &HoverConfig {
-            links_in_hover: true,
-            documentation: Some(HoverDocFormat::Markdown),
-        }).unwrap() {
+        let FilePosition { file_id, offset } =
+            file_position(line_number, column, &line_index, self.file_id);
+        let range = FileRange {
+            file_id,
+            range: TextRange::new(TextSize::from(offset), TextSize::from(offset)),
+        };
+        let info = match self
+            .analysis
+            .hover(
+                &HoverConfig {
+                    links_in_hover: true,
+                    documentation: Some(HoverDocFormat::Markdown),
+                },
+                range,
+            )
+            .unwrap()
+        {
             Some(info) => info,
             _ => return JsValue::NULL,
         };
