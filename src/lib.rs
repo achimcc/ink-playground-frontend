@@ -83,7 +83,7 @@ pub struct WorldState {
 impl WorldState {
     #[wasm_bindgen(constructor)]
     pub fn new() -> Self {
-        let file_id = FileId(183);
+        let file_id = FileId(182);
         let analysis_host = AnalysisHost::default();
         let analysis = analysis_host.analysis();
         let analysis_host = AnalysisHost::default();
