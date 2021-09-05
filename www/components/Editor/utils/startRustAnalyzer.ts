@@ -38,16 +38,22 @@ export const startRustAnalyzer = async (monaco: any, model: any) => {
   );
   let i = 0;
   // Fetch the crate data and send it to rust-analyzer
+  /*
   for (i = 1; i < 8; i++) {
     const part = await fetch(`./part${i}.json`);
     const res = await part.text();
     await state.load(res);
   }
+  */
+
+  const data = await fetch(`./change.json`);
+  const res = await data.text();
+  await state.load(res);
 
   async function update() {
     const text = model.getValue();
     await state.update(text);
-    const res = await state.analyze(183);
+    const res = await state.analyze(182);
     monaco.editor.setModelMarkers(model, modeId, res.diagnostics);
     allTokens.length = 0;
     allTokens.push(...res.highlights);
