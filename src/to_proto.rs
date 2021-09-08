@@ -106,8 +106,11 @@ pub(crate) fn completion_item(
         range,
         detail: item.detail().map(|it| it.to_string()),
         insertText: text,
-        //ToDo: text rules depend on item!
-        insertTextRules: return_types::CompletionItemInsertTextRule::None,
+        insertTextRules: if item.is_snippet() {
+            return_types::CompletionItemInsertTextRule::InsertAsSnippet
+        } else {
+            return_types::CompletionItemInsertTextRule::None
+        },
         documentation: item.documentation().map(|doc| markdown_string(doc.as_str())),
         filterText: item.lookup().to_string(),
         additionalTextEdits: additional_text_edits,

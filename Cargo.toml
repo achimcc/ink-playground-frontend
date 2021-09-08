@@ -22,7 +22,7 @@ stacker = "0.1.13"
 wasm-bindgen = "0.2.74"
 rayon = "1.5.1"
 wasm-bindgen-rayon = "1.0.3"
-change_json = {path = "/home/achim/Projects/wasm/trait_extractor/crates/change_json"}
+change_json = {git = "https://github.com/achimcc/crate-extractor", branch = "main"}
 
 ide_db = {package = "ra_ap_ide_db", version = "0.0.71"}
 ide = {package = "ra_ap_ide", version = "0.0.71"}

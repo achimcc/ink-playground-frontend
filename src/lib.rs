@@ -2,7 +2,6 @@
 #![allow(non_snake_case)]
 
 use std::sync::Arc;
-
 use change_json::ChangeJson;
 use ide::{
     Analysis, AnalysisHost, CompletionConfig, DiagnosticsConfig, FileId, FilePosition, FileRange,
@@ -83,7 +82,7 @@ pub struct WorldState {
 impl WorldState {
     #[wasm_bindgen(constructor)]
     pub fn new() -> Self {
-        let file_id = FileId(182);
+        let file_id = FileId(183);
         let analysis_host = AnalysisHost::default();
         let analysis = analysis_host.analysis();
         let analysis_host = AnalysisHost::default();
