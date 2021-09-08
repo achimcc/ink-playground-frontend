@@ -91,8 +91,8 @@ module.exports = {
   // It is needed for firefox works
   devServer: {
     headers: {
-      "Cross-Origin-Opener-Policy-Report-Only": "same-origin",
-      "Cross-Origin-Embedder-Policy-Report-Only": "require-corp",
+      "Cross-Origin-Opener-Policy": "same-origin",
+      "Cross-Origin-Embedder-Policy": "require-corp",
     },
   },
 };

@@ -18,11 +18,13 @@ import { startRustAnalyzer } from "./utils/startRustAnalyzer";
 import { Module } from "webpack";
 
 const modeId = "ra-rust"; // not "rust" to circumvent conflict
+/*
 (window as any).MonacoEnvironment = {
   getWorkerUrl: function (moduleId: any, label: any) {
     return "./editor.worker.js";
   },
 };
+*/
 interface Props {
   height: number;
 }
