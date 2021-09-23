@@ -25,11 +25,9 @@ const modeId = "ra-rust"; // not "rust" to circumvent conflict
   },
 };
 */
-interface Props {
-  height: number;
-}
+interface Props {}
 
-const Editor: React.FC<Props> = ({ height }: Props) => {
+const Editor: React.FC<Props> = ({}: Props) => {
   console.log("start rendering!");
   let divNode: any;
   const assignRef = useCallback((node) => {
@@ -96,63 +94,7 @@ const Editor: React.FC<Props> = ({ height }: Props) => {
 
   return (
     <>
-      <div
-        id="test"
-        ref={assignRef}
-        style={{
-          height: `${height}vh`,
-          width: "100%",
-          minWidth: 0,
-          border: "1px solid black",
-          position: "relative",
-        }}
-      >
-        {isMonacoLoading && (
-          <div
-            style={{
-              position: "absolute",
-              left: "calc(50% - 150px)",
-              top: "calc(50% - 150px)",
-              transform: "translate(-50%, -50%)",
-            }}
-          >
-            <RingLoader size={300} color={"#3EACF2"} />
-          </div>
-        )}
-      </div>
-
-      <div
-        style={{
-          width: "100%",
-          minWidth: 0,
-          border: "1px solid black",
-          display: "table",
-        }}
-      >
-        {isLoading ? (
-          <div>
-            <div style={{ padding: "1px 2px", display: "table-cell" }}>
-              <ClipLoader size={12} />
-            </div>
-            <div style={{ display: "table-cell" }}>
-              Loading Rust-Analyzer...
-            </div>
-          </div>
-        ) : (
-          <>
-            <div
-              style={{
-                padding: "1px 2px",
-                display: "table-cell",
-                width: "18px",
-              }}
-            >
-              <FaCheckCircle />
-            </div>
-            <div style={{ display: "table-cell" }}>Rust Analyzer Ready</div>
-          </>
-        )}
-      </div>
+      <div id="test" ref={assignRef} className="h-full" />
     </>
   );
 };

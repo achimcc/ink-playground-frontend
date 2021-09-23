@@ -34,7 +34,7 @@ export type PlaygroundAction =
 
 const INIT_STATE: PlaygroundState = {
   isDarkMode: true,
-  isNumbering: false,
+  isNumbering: true,
   isMiniMap: false,
   dispatch: null,
   requestCompile: () => null,

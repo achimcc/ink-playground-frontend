@@ -4,7 +4,8 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack --config webpack.config.js --mode production",
-    "start": "webpack serve --host 0.0.0.0"
+    "start": "npm run tailwind:css && webpack serve --host 0.0.0.0",
+    "tailwind:css": "tailwind build -i tailwind.css -c tailwind.config.js -o ./index.css"
   },
   "author": "rust-analyzer developers",
   "license": "(MIT OR Apache-2.0)",
@@ -34,6 +35,7 @@
     "react-dev-utils": "^11.0.3",
     "react-transition-group": "^4.4.2",
     "style-loader": "^2.0.0",
+    "tailwindcss": "^2.2.15",
     "ts-loader": "^9.2.1",
     "webpack": "^5.27.1",
     "webpack-cli": "^4.7.2",
