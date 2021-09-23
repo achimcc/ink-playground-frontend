@@ -5,7 +5,7 @@ import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 import { Splitter, SplitterPanel } from "primereact/splitter";
-import { Editor, Terminal } from "./components";
+import { Editor, Terminal, Status } from "./components";
 import { usePlayground } from "./context";
 import { Header } from "./components/Header";
 
@@ -35,6 +35,9 @@ function App() {
             <Terminal />
           </SplitterPanel>
         </Splitter>
+      </div>
+      <div className="flex-grow-0">
+        <Status />
       </div>
     </div>
   );
