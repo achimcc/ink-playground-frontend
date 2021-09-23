@@ -32,11 +32,11 @@ const Header = () => {
             onClick={() => downloadBlob(blob as Blob)}
           />
         </div>
-        <Tooltip target=".ctn-download-btn">
-          {!blob
-            ? "Compile first to download .contract bundle"
-            : "Click to Download .contract bundle"}
-        </Tooltip>
+        {!blob && (
+          <Tooltip target=".ctn-download-btn">
+            Compile first to download .contract bundle
+          </Tooltip>
+        )}
         <div>
           <Share />
         </div>
