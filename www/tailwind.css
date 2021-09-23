@@ -14,6 +14,10 @@
     background-color: #242A2E !important;
 }
 
+.p-button:focus {
+    box-shadow: none !important;
+}
+
 .p-splitter {
     border: none !important;
 }
