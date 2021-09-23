@@ -55,7 +55,7 @@ const Header = () => {
         <div className="flex-grow" />
         <div className="flex space-x-2 p-3">
           <a
-            className="flex items-center bg-transparent text-primary text-xs px-3 py-1.5 rounded hover:bg-elevation-2"
+            className="flex items-center bg-transparent text-primary text-xs px-3 py-1.5 rounded hover:bg-elevation-2 transition duration-200 ease-in-out"
             href="https://paritytech.github.io/ink-docs/"
             rel="noopener noreferrer"
             target="_blank"
@@ -64,7 +64,7 @@ const Header = () => {
             ink! Docs
           </a>
           <a
-            className="flex items-center bg-transparent text-primary text-xs px-3 py-1.5 rounded hover:bg-elevation-2"
+            className="flex items-center bg-transparent text-primary text-xs px-3 py-1.5 rounded hover:bg-elevation-2 transition duration-200 ease-in-out"
             href="https://github.com/paritytech/canvas-ui-v2"
             rel="noopener noreferrer"
             target="_blank"
@@ -73,7 +73,7 @@ const Header = () => {
             Deploy on Canvas UI
           </a>
           <a
-            className="flex items-center bg-transparent text-primary text-xs px-3 py-1.5 rounded hover:bg-elevation-2"
+            className="flex items-center bg-transparent text-primary text-xs px-3 py-1.5 rounded hover:bg-elevation-2 transition duration-200 ease-in-out"
             href="https://github.com/paritytech/ink-playground"
             rel="noopener noreferrer"
             target="_blank"
