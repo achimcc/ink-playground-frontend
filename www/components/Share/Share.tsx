@@ -93,7 +93,7 @@ const Share = () => {
         showCloseIcon
         id="overlay_panel"
         style={{ width: "700px" }}
-        className="bg-gray-600 text-primary"
+        className="bg-elevation-2 text-primary"
       >
         <>
           <Button

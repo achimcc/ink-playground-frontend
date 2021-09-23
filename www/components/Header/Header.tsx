@@ -53,7 +53,7 @@ const Header = () => {
           </div>
           </div>
         <div className="flex-grow" />
-        <div className="flex space-x-4 p-3">
+        <div className="flex space-x-2 p-3">
           <a
             className="flex items-center bg-transparent text-primary text-xs px-3 py-1.5 rounded hover:bg-elevation-2"
             href="https://paritytech.github.io/ink-docs/"

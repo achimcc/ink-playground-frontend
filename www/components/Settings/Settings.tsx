@@ -45,15 +45,15 @@ const Settings = () => {
         showCloseIcon
         id="overlay_panel"
         style={{ width: "450px" }}
-        className="bg-gray-600 text-primary"
+        className="bg-elevation-2 text-primary"
       >
         <>
-          <h5>Dark Mode</h5>
-          <InputSwitch checked={isDarkMode} onChange={toggleDark} />
-          <h5>Show Minimap</h5>
-          <InputSwitch checked={isMiniMap} onChange={toggleMinimap} />
-          <h5>Show Numbering</h5>
-          <InputSwitch checked={isNumbering} onChange={toggleNumbering} />
+          <h5 className="mb-2 text-sm">Dark Mode</h5>
+          <InputSwitch className="mb-4" checked={isDarkMode} onChange={toggleDark} />
+          <h5 className="mb-2 text-sm">Show Minimap</h5>
+          <InputSwitch className="mb-4" checked={isMiniMap} onChange={toggleMinimap} />
+          <h5 className="mb-2 text-sm">Show Numbering</h5>
+          <InputSwitch className="mb-4" checked={isNumbering} onChange={toggleNumbering} />
         </>
       </OverlayPanel>
       */
