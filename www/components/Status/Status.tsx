@@ -6,7 +6,7 @@ import { ClipLoader } from "react-spinners";
 const Status = () => {
   const { isLoading } = usePlayground();
   return (
-    <div className="table bg-primary text-primary w-full">
+    <div className="table bg-gray-600 text-primary w-full">
       {isLoading ? (
         <div>
           <div className="px-0.5 py-1 table-cell">
