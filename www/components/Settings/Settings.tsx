@@ -3,6 +3,7 @@ import { OverlayPanel } from "primereact/overlaypanel";
 import { Button } from "primereact/button";
 import { usePlayground } from "../../context";
 import { InputSwitch, InputSwitchChangeParams } from "primereact/inputswitch";
+import { CogIcon } from '@heroicons/react/solid'
 
 const Settings = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -30,13 +31,14 @@ const Settings = () => {
     <div>
       <Button
         type="button"
-        icon="pi pi-cog"
-        label={"Settings"}
         onClick={(e) => op.current.toggle(e)}
         aria-haspopup
         aria-controls="overlay_panel"
-        className="bg-primary text-primary transform scale-75 border-0"
-      />
+        className="bg-primary text-primary text-xs border-0"
+      >
+        <CogIcon className="w-4 h-4 mr-2 text-primary"/>
+        Settings
+      </Button>
       /*
       <OverlayPanel
         ref={op}
