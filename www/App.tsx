@@ -5,9 +5,8 @@ import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 import { Splitter, SplitterPanel } from "primereact/splitter";
-import { Editor, Terminal, Status } from "./components";
+import { Editor, Terminal, Status, Header } from "./components";
 import { usePlayground } from "./context";
-import { Header } from "./components/Header";
 
 function App() {
   useEffect(() => {
@@ -28,7 +27,7 @@ function App() {
       </div>
       <div className="flex-grow">
         <Splitter className="w-full h-full" layout="vertical">
-          <SplitterPanel size={70} style={{ overflow: "hidden" }}>
+          <SplitterPanel size={70} className="overflow-hidden">
             <Editor />
           </SplitterPanel>
           <SplitterPanel size={30}>
