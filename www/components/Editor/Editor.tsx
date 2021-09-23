@@ -1,7 +1,4 @@
 import encoding from "text-encoding";
-import { ClipLoader, RingLoader } from "react-spinners";
-import { FaCheckCircle } from "react-icons/fa";
-
 import exampleCode from "./data/example-code";
 
 if (typeof TextEncoder === "undefined") {
@@ -15,7 +12,6 @@ import React from "react";
 import { usePlayground } from "../../context";
 
 import { startRustAnalyzer } from "./utils/startRustAnalyzer";
-import { Module } from "webpack";
 
 const modeId = "ra-rust"; // not "rust" to circumvent conflict
 /*
@@ -37,8 +33,6 @@ const Editor: React.FC<Props> = ({}: Props) => {
 
   const editor = useRef<any>();
   const { isDarkMode, isMiniMap, isNumbering, dispatch } = usePlayground();
-  const [isMonacoLoading, setIsMonacoLoading] = useState<boolean>(true);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   async function init() {
     const monaco = await import(
@@ -53,21 +47,13 @@ const Editor: React.FC<Props> = ({}: Props) => {
       model: model,
       automaticLayout: true,
     });
-    setIsMonacoLoading(false);
     editor.current = myEditor;
     myEditor.updateOptions({ theme: isDarkMode ? "vs-dark" : "vs" });
     window.onresize = () => myEditor.layout();
     await startRustAnalyzer(monaco, model);
-    setIsLoading(false);
     dispatch({
-      type: "LOG_MESSAGE",
-      payload: {
-        severity: "success",
-        summary: `Rust Analyzer Ready!`,
-        detail: ``,
-        sticky: true,
-        closable: false,
-      },
+      type: "SET_RA_LOADING",
+      payload: false,
     });
   }
 

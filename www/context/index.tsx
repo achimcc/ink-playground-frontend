@@ -9,6 +9,7 @@ export interface PlaygroundState {
   isNumbering: boolean;
   dispatch: any;
   uri: any;
+  isLoading: boolean;
   requestCompile: Function;
   messages: Array<Object>;
   gistId: string | null;
@@ -26,6 +27,7 @@ export type PlaygroundAction =
   | { type: "LOG_MESSAGE"; payload: object }
   | { type: "SET_URI"; payload: any }
   | { type: "SET_BLOB"; payload: Blob }
+  | { type: "SET_RA_LOADING"; payload: boolean }
   | { type: "SET_COMPILING"; payload: boolean }
   | {
       type: "SET_GIST";
@@ -35,10 +37,11 @@ export type PlaygroundAction =
 const INIT_STATE: PlaygroundState = {
   isDarkMode: true,
   isNumbering: true,
-  isMiniMap: false,
+  isMiniMap: true,
   dispatch: null,
   requestCompile: () => null,
   uri: null,
+  isLoading: true,
   gistId: null,
   gistUrl: null,
   isCompiling: false,
@@ -76,6 +79,9 @@ export const appReducer: Reducer<PlaygroundState, PlaygroundAction> = (
     }
     case "SET_COMPILING": {
       return { ...state, isCompiling: action.payload };
+    }
+    case "SET_RA_LOADING": {
+      return { ...state, isLoading: action.payload };
     }
     case "LOG_MESSAGE":
       return { ...state, messages: [action.payload, ...state.messages] };
