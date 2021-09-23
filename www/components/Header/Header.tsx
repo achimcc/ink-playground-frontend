@@ -26,7 +26,6 @@ const Header = () => {
         <div className="ctn-download-btn">
           <Button
             label="Download"
-            loading={isCompiling}
             className="bg-primary text-primary transform scale-75 border-0"
             icon="pi pi-download"
             disabled={!blob}
