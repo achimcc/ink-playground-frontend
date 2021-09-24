@@ -100,6 +100,10 @@ export const PlaygroundContextProvider = ({
   const requestCompile = async () => {
     if (state.isCompiling) return;
     dispatch({
+      type: "SET_BLOB",
+      payload: null,
+    });
+    dispatch({
       type: "SET_COMPILING",
       payload: true,
     });
