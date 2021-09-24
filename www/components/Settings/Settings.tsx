@@ -3,6 +3,7 @@ import { OverlayPanel } from "primereact/overlaypanel";
 import { Button } from "primereact/button";
 import { usePlayground } from "../../context";
 import { InputSwitch, InputSwitchChangeParams } from "primereact/inputswitch";
+import { CogIcon } from '@heroicons/react/solid'
 
 const Settings = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -30,28 +31,29 @@ const Settings = () => {
     <div>
       <Button
         type="button"
-        icon="pi pi-cog"
-        label={"Settings"}
         onClick={(e) => op.current.toggle(e)}
         aria-haspopup
         aria-controls="overlay_panel"
-        className="bg-primary text-primary transform scale-75 border-0"
-      />
+        className="bg-primary text-primary text-xs border-0"
+      >
+        <CogIcon className="w-4 h-4 mr-2 text-primary"/>
+        Settings
+      </Button>
       /*
       <OverlayPanel
         ref={op}
         showCloseIcon
         id="overlay_panel"
         style={{ width: "450px" }}
-        className="bg-gray-600 text-primary"
+        className="bg-elevation-2 text-primary"
       >
         <>
-          <h5>Dark Mode</h5>
-          <InputSwitch checked={isDarkMode} onChange={toggleDark} />
-          <h5>Show Minimap</h5>
-          <InputSwitch checked={isMiniMap} onChange={toggleMinimap} />
-          <h5>Show Numbering</h5>
-          <InputSwitch checked={isNumbering} onChange={toggleNumbering} />
+          <h5 className="mb-2 text-sm">Dark Mode</h5>
+          <InputSwitch className="mb-4" checked={isDarkMode} onChange={toggleDark} />
+          <h5 className="mb-2 text-sm">Show Minimap</h5>
+          <InputSwitch className="mb-4" checked={isMiniMap} onChange={toggleMinimap} />
+          <h5 className="mb-2 text-sm">Show Numbering</h5>
+          <InputSwitch className="mb-4" checked={isNumbering} onChange={toggleNumbering} />
         </>
       </OverlayPanel>
       */

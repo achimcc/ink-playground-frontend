@@ -6,6 +6,7 @@ import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 import { performGistSave } from "../../integration/integration";
 import { Divider } from "primereact/divider";
 import { Fieldset } from "primereact/fieldset";
+import { ShareIcon } from '@heroicons/react/solid'
 
 import { Card } from "primereact/card";
 import { PLAYGROUND_URL } from "../../config/constants";
@@ -79,24 +80,25 @@ const Share = () => {
     <div>
       <Button
         type="button"
-        icon="pi pi-file-o"
-        label={"Share"}
         onClick={(e) => op.current.toggle(e)}
         aria-haspopup
         aria-controls="overlay_panel"
-        className="bg-primary text-primary transform scale-75 border-0"
-      />
+        className="bg-primary text-primary text-xs border-0"
+      >
+        <ShareIcon className="w-4 h-4 mr-2 text-primary"/>
+        Share
+      </Button>
       <OverlayPanel
         ref={op}
         showCloseIcon
         id="overlay_panel"
         style={{ width: "700px" }}
-        className="bg-gray-600 text-primary"
+        className="bg-elevation-2 text-primary"
       >
         <>
           <Button
             label="Create Gist"
-            className="bg-primary text-primary transform scale-75 border-0"
+            className="bg-primary text-primary text-xs border-0"
             loading={loading}
             icon="pi pi-share-alt"
             onClick={requestShare}

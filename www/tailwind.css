@@ -1,3 +1,58 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.monaco-editor, .monaco-editor-background, .monaco-editor .inputarea.ime-input {
+    background-color: #1A1D1F !important;
+}
+
+.p-button {
+    padding: 6px 12px !important;
+}
+
+.p-button:not(a):not(.p-disabled):hover {
+    background-color: #242A2E !important;
+}
+
+.p-button:focus {
+    box-shadow: none !important;
+}
+
+.p-splitter {
+    border: none !important;
+}
+
+.p-tooltip {
+    background-color: #242A2E !important;  
+}
+
+.p-overlaypanel {
+    border-radius: 0.5rem !important;
+}
+
+.p-overlaypanel .p-overlaypanel-close {
+    top: 0.5rem !important;
+    right: 0.5rem !important;
+    background-color: transparent !important;
+    color: #737480 !important;
+}
+
+.p-overlaypanel .p-overlaypanel-close:hover {
+    background-color: transparent !important; 
+}
+
+.p-inputswitch .p-inputswitch-slider {
+    background-color: #1A1D1F !important;
+}
+
+.p-inputswitch.p-inputswitch-checked .p-inputswitch-slider {
+    background-color: #5A69EB !important;
+}
+
+.p-inputswitch .p-inputswitch-slider:before {
+    background-color: #737480 !important;
+}
+
+.p-inputswitch.p-inputswitch-checked .p-inputswitch-slider:before {
+    background-color: #fff !important;
+}
