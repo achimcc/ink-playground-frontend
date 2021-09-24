@@ -42,15 +42,15 @@ const Header = () => {
               Download
             </Button>
           </div>
-          <Tooltip
-            className="text-primary text-xs"
-            target=".ctn-download-btn"
-            style={{ backgroundColor: "#242A2E !important" }}
-          >
-            {!blob
-              ? "Compile first to download .contract bundle"
-              : "Click to download .contract bundle"}
-          </Tooltip>
+          {!blob && (
+            <Tooltip
+              className="text-primary text-xs"
+              target=".ctn-download-btn"
+              style={{ backgroundColor: "#242A2E !important" }}
+            >
+              Compile first to download .contract bundle
+            </Tooltip>
+          )}
           <div>
             <Share />
           </div>
