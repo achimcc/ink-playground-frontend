@@ -118,7 +118,7 @@ export const PlaygroundContextProvider = ({
       type: "LOG_MESSAGE",
       payload: {
         severity: "info",
-        prompt: "Starting compilation",
+        prompt: "Compiling:",
         text: `...`,
       },
     });
@@ -136,7 +136,7 @@ export const PlaygroundContextProvider = ({
             type: "LOG_MESSAGE",
             payload: {
               severity: "error",
-              prompt: "Compilation Error: ",
+              prompt: "Error: ",
               text: (response as any).stderr,
             },
           });
@@ -145,7 +145,7 @@ export const PlaygroundContextProvider = ({
             type: "LOG_MESSAGE",
             payload: {
               severity: "success",
-              prompt: "Compilation Successfull: ",
+              prompt: "Compiled: ",
               text: (response as any).stdout,
             },
           });
@@ -160,7 +160,7 @@ export const PlaygroundContextProvider = ({
           type: "LOG_MESSAGE",
           payload: {
             severity: "error",
-            prompt: "Communication Error: ",
+            prompt: "Error: ",
             text: error,
           },
         });
