@@ -21,7 +21,7 @@ function App() {
   });
   const { uri } = usePlayground();
   return (
-    <div className="h-full flex flex-col">
+    <div className="h-full flex flex-col overflow-hidden">
       <div className="flex-grow-0">
         <Header />
       </div>
