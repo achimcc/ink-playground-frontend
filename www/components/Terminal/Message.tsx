@@ -6,9 +6,9 @@ interface Props {
 }
 
 const severityColors = {
-  info: "text-yellow-300",
-  success: "text-green-300",
-  error: "text-red-300",
+  info: "text-yellow-400",
+  success: "text-green-400",
+  error: "text-red-400",
 };
 
 const TerminalMessage = ({ message: m }: Props) => {
