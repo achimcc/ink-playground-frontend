@@ -26,18 +26,16 @@ const Header = () => {
         </div>
         <div className="flex space-x-2 p-3 items-center">
           <Button
+            label="Compile"
             loading={isCompiling}
-            className="bg-primary text-primary text-xs border-0"
+            className="bg-primary text-primary transform scale-75 border-0"
+            icon="pi pi-play"
             onClick={onCompile}
-          >
-            <PlayIcon className="w-4 h-4 mr-2 text-primary" />
-            Compile
-          </Button>
+          />
           <div className="ctn-download-btn">
             <Button
-              loading={isCompiling}
               className="bg-primary text-primary text-xs border-0"
-              disabled={!blob}
+              disabled={!blob || isCompiling}
               onClick={() => downloadBlob(blob as Blob)}
             >
               <DownloadIcon className="w-4 h-4 mr-2 text-primary" />
