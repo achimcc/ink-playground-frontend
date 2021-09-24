@@ -5,7 +5,7 @@ import React from "react";
 const Terminal = () => {
   const { messages } = usePlayground();
   return (
-    <div className="w-full">
+    <div className="w-full overflow-hidden">
       <div
         className="coding inverse-toggle px-5 pt-4 shadow-lg text-primary text-sm font-mono subpixel-antialiased 
               bg-primary  pb-6 leading-normal overflow-hidden h-full"
