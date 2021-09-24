@@ -4,7 +4,13 @@ import { Button } from "primereact/button";
 import { Tooltip } from "primereact/tooltip";
 import { Settings, Share } from "../";
 import { downloadBlob } from "../../integration/integration";
-import { AcademicCapIcon, ArrowCircleUpIcon, CodeIcon, DownloadIcon, PlayIcon } from '@heroicons/react/solid'
+import {
+  AcademicCapIcon,
+  ArrowCircleUpIcon,
+  CodeIcon,
+  DownloadIcon,
+  PlayIcon,
+} from "@heroicons/react/solid";
 
 const Header = () => {
   const { isCompiling, requestCompile, blob } = usePlayground();
@@ -13,7 +19,9 @@ const Header = () => {
     <>
       <header className="bg-primary flex flex-row">
         <div className="flex items-center justify-center">
-          <h1 className="text-primary font-semibold pl-4 mr-3">ink! Playground</h1>
+          <h1 className="text-primary font-semibold pl-4 mr-3">
+            ink! Playground
+          </h1>
           <div className="w-px h-6 bg-gray-700" />
         </div>
         <div className="flex space-x-2 p-3 items-center">
@@ -22,7 +30,7 @@ const Header = () => {
             className="bg-primary text-primary text-xs border-0"
             onClick={onCompile}
           >
-            <PlayIcon className="w-4 h-4 mr-2 text-primary"/>
+            <PlayIcon className="w-4 h-4 mr-2 text-primary" />
             Compile
           </Button>
           <div className="ctn-download-btn">
@@ -32,7 +40,7 @@ const Header = () => {
               disabled={!blob}
               onClick={() => downloadBlob(blob as Blob)}
             >
-              <DownloadIcon className="w-4 h-4 mr-2 text-primary"/>
+              <DownloadIcon className="w-4 h-4 mr-2 text-primary" />
               Download
             </Button>
           </div>
@@ -51,7 +59,7 @@ const Header = () => {
           <div>
             <Settings />
           </div>
-          </div>
+        </div>
         <div className="flex-grow" />
         <div className="flex space-x-2 p-3">
           <a
@@ -60,7 +68,7 @@ const Header = () => {
             rel="noopener noreferrer"
             target="_blank"
           >
-            <AcademicCapIcon className="w-4 h-4 mr-2 text-primary"/>
+            <AcademicCapIcon className="w-4 h-4 mr-2 text-primary" />
             ink! Docs
           </a>
           <a
@@ -69,7 +77,7 @@ const Header = () => {
             rel="noopener noreferrer"
             target="_blank"
           >
-            <ArrowCircleUpIcon className="w-4 h-4 mr-2 text-primary"/>
+            <ArrowCircleUpIcon className="w-4 h-4 mr-2 text-primary" />
             Deploy on Canvas UI
           </a>
           <a
@@ -78,7 +86,7 @@ const Header = () => {
             rel="noopener noreferrer"
             target="_blank"
           >
-            <CodeIcon className="w-4 h-4 mr-2 text-primary"/>
+            <CodeIcon className="w-4 h-4 mr-2 text-primary" />
             Github Repo
           </a>
         </div>
