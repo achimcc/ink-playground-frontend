@@ -1,4 +1,4 @@
-import React, { useReducer, useEffect, useContext } from "react";
+import React, { useReducer, useContext } from "react";
 import type { Reducer } from "react";
 import { parseRequest, performCompile } from "../integration/integration";
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
@@ -11,7 +11,7 @@ export interface PlaygroundState {
   uri: any;
   isLoading: boolean;
   requestCompile: Function;
-  messages: Array<Object>;
+  messages: Array<Message>;
   gistId: string | null;
   gistUrl: string | null;
   isCompiling: boolean;
@@ -19,12 +19,17 @@ export interface PlaygroundState {
   playgroundUrl: string | null;
 }
 
+export type Message = {
+  severity: "info" | "error" | "success";
+  prompt: String;
+  text: String;
+};
+
 export type PlaygroundAction =
-  | { type: "LOG_MESSAGE"; payload: string }
+  | { type: "LOG_MESSAGE"; payload: Message }
   | { type: "SET_DARKMODE"; payload: boolean }
   | { type: "SET_NUMBERING"; payload: boolean }
   | { type: "SET_MINIMAP"; payload: boolean }
-  | { type: "LOG_MESSAGE"; payload: object }
   | { type: "SET_URI"; payload: any }
   | { type: "SET_BLOB"; payload: Blob }
   | { type: "SET_RA_LOADING"; payload: boolean }
@@ -50,10 +55,8 @@ const INIT_STATE: PlaygroundState = {
   messages: [
     {
       severity: "info",
-      summary: "Welcome! ",
-      detail: ` Loading rust analyzer...`,
-      sticky: true,
-      closable: false,
+      prompt: "Welcome! ",
+      text: ` Loading rust analyzer...`,
     },
   ],
 };
@@ -83,8 +86,9 @@ export const appReducer: Reducer<PlaygroundState, PlaygroundAction> = (
     case "SET_RA_LOADING": {
       return { ...state, isLoading: action.payload };
     }
-    case "LOG_MESSAGE":
+    case "LOG_MESSAGE": {
       return { ...state, messages: [action.payload, ...state.messages] };
+    }
     default:
       throw new Error(`Unknown action: ${action}`);
   }
@@ -114,10 +118,8 @@ export const PlaygroundContextProvider = ({
       type: "LOG_MESSAGE",
       payload: {
         severity: "info",
-        summary: "Starting compilation",
-        detail: ``,
-        sticky: true,
-        closable: false,
+        prompt: "Starting compilation",
+        text: `...`,
       },
     });
     await performCompile(request)
@@ -134,10 +136,8 @@ export const PlaygroundContextProvider = ({
             type: "LOG_MESSAGE",
             payload: {
               severity: "error",
-              summary: "Compilation Error: ",
-              detail: (response as any).stderr,
-              sticky: true,
-              closable: false,
+              prompt: "Compilation Error: ",
+              text: (response as any).stderr,
             },
           });
         } else {
@@ -145,10 +145,8 @@ export const PlaygroundContextProvider = ({
             type: "LOG_MESSAGE",
             payload: {
               severity: "success",
-              summary: "Compilation Successfull: ",
-              detail: (response as any).stdout,
-              sticky: true,
-              closable: false,
+              prompt: "Compilation Successfull: ",
+              text: (response as any).stdout,
             },
           });
           dispatch({
@@ -162,10 +160,8 @@ export const PlaygroundContextProvider = ({
           type: "LOG_MESSAGE",
           payload: {
             severity: "error",
-            summary: "Communication Error: ",
-            detail: error,
-            sticky: true,
-            closable: false,
+            prompt: "Communication Error: ",
+            text: error,
           },
         });
         dispatch({
