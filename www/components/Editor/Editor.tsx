@@ -14,13 +14,6 @@ import { usePlayground } from "../../context";
 import { startRustAnalyzer } from "./utils/startRustAnalyzer";
 
 const modeId = "ra-rust"; // not "rust" to circumvent conflict
-/*
-(window as any).MonacoEnvironment = {
-  getWorkerUrl: function (moduleId: any, label: any) {
-    return "./editor.worker.js";
-  },
-};
-*/
 interface Props {}
 
 const Editor: React.FC<Props> = ({}: Props) => {
@@ -64,17 +57,14 @@ const Editor: React.FC<Props> = ({}: Props) => {
   }, [assignRef]);
 
   useEffect(() => {
-    // @ts-ignore
     editor.current?.updateOptions({ theme: isDarkMode ? "vs-dark" : "vs" });
   }, [isDarkMode, editor]);
 
   useEffect(() => {
-    // @ts-ignore
     editor.current?.updateOptions({ minimap: { enabled: isMiniMap } });
   }, [isMiniMap, editor]);
 
   useEffect(() => {
-    // @ts-ignore
     editor.current?.updateOptions({ lineNumbers: isNumbering ? "on" : "off" });
   }, [isNumbering, editor]);
 
