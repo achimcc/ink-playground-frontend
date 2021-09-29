@@ -123,6 +123,7 @@ export const PlaygroundContextProvider = ({
       },
     });
     await performCompile(request)
+      .catch((e) => console.log(e))
       .then((response) => {
         console.log("response: ", response);
         dispatch({
