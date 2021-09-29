@@ -66,8 +66,14 @@ export function performCompile({
     target,
     code,
   };
-  const response = jsonPost(routes.compile, body);
-  return response;
+  let response;
+  try {
+    response = jsonPost(routes.compile, body);
+  } catch {
+    response = "error";
+  } finally {
+    return response;
+  }
 }
 
 export function performGistSave(code: string) {
