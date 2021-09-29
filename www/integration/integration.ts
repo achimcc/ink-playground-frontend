@@ -66,9 +66,7 @@ export function performCompile({
     target,
     code,
   };
-  const response = jsonPost(routes.compile, body).catch((json) => {
-    throw new Error(`json post error: ${json.error}`);
-  });
+  const response = jsonPost(routes.compile, body);
   return response;
 }
 

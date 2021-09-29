@@ -123,7 +123,16 @@ export const PlaygroundContextProvider = ({
       },
     });
     await performCompile(request)
-      .catch((e) => console.log(e))
+      .catch((err) =>
+        dispatch({
+          type: "LOG_MESSAGE",
+          payload: {
+            severity: "error",
+            prompt: "Compile Error: ",
+            text: err,
+          },
+        })
+      )
       .then((response) => {
         console.log("response: ", response);
         dispatch({
