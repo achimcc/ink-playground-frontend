@@ -118,19 +118,21 @@ async function fetchJson(url: string, args: any): Promise<Response> {
   try {
     response = await fetch(url, { ...args, headers });
   } catch (networkError) {
+    console.log("error: ", networkError);
     // e.g. server unreachable
-    throw {
-      error: `Network error: ${networkError.toString()}`,
-    };
+    //  throw {
+    //    error: `Network error: ${networkError.toString()}`,
+    //};
   }
 
   let body: Response;
   try {
     body = await response.json();
   } catch (convertError) {
-    throw {
-      error: `Response was not JSON: ${convertError.toString()}`,
-    };
+    console.log("error: ", convertError);
+    // throw {
+    //   error: `Response was not JSON: ${convertError.toString()}`,
+    // };
   }
 
   if (response.ok) {
@@ -138,7 +140,8 @@ async function fetchJson(url: string, args: any): Promise<Response> {
     return body;
   } else {
     // HTTP 4xx, 5xx (e.g. malformed JSON request)
-    throw body;
+    console.log("body error");
+    // throw body;
   }
 }
 
