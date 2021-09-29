@@ -123,16 +123,20 @@ export const PlaygroundContextProvider = ({
       },
     });
     await performCompile(request)
-      .catch((err) =>
+      .catch((err) => {
         dispatch({
           type: "LOG_MESSAGE",
           payload: {
             severity: "error",
             prompt: "Compile Error: ",
-            text: err,
+            text: err?.error,
           },
-        })
-      )
+        });
+        dispatch({
+          type: "SET_COMPILING",
+          payload: false,
+        });
+      })
       .then((response) => {
         console.log("response: ", response);
         dispatch({
@@ -164,20 +168,6 @@ export const PlaygroundContextProvider = ({
             payload: code,
           });
         }
-      })
-      .catch((error) => {
-        dispatch({
-          type: "LOG_MESSAGE",
-          payload: {
-            severity: "error",
-            prompt: "Error: ",
-            text: error,
-          },
-        });
-        dispatch({
-          type: "SET_COMPILING",
-          payload: false,
-        });
       });
   };
   const value = { ...state, dispatch, requestCompile };

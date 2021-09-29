@@ -70,6 +70,7 @@ export function performCompile({
   try {
     response = jsonPost(routes.compile, body);
   } catch {
+    console.log("here response error!");
     response = "error";
   } finally {
     return response;
@@ -140,8 +141,8 @@ async function fetchJson(url: string, args: any): Promise<Response> {
     return body;
   } else {
     // HTTP 4xx, 5xx (e.g. malformed JSON request)
-    console.log("body error");
-    // throw body;
+    // console.log("body error");
+    throw body;
   }
 }
 
