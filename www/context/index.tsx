@@ -160,7 +160,7 @@ export const PlaygroundContextProvider = ({
             payload: {
               severity: "success",
               prompt: "Compiled: ",
-              text: (response as any).sterr,
+              text: (response as any).stderr,
             },
           });
           dispatch({
