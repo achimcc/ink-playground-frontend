@@ -87,7 +87,7 @@ export const appReducer: Reducer<PlaygroundState, PlaygroundAction> = (
       return { ...state, isLoading: action.payload };
     }
     case "LOG_MESSAGE": {
-      return { ...state, messages: [action.payload, ...state.messages] };
+      return { ...state, messages: [...state.messages, action.payload] };
     }
     default:
       throw new Error(`Unknown action: ${action}`);

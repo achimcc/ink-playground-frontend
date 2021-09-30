@@ -66,15 +66,7 @@ export function performCompile({
     target,
     code,
   };
-  let response;
-  try {
-    response = jsonPost(routes.compile, body);
-  } catch {
-    console.log("here response error!");
-    response = "error";
-  } finally {
-    return response;
-  }
+  return jsonPost(routes.compile, body);
 }
 
 export function performGistSave(code: string) {
@@ -119,21 +111,19 @@ async function fetchJson(url: string, args: any): Promise<Response> {
   try {
     response = await fetch(url, { ...args, headers });
   } catch (networkError) {
-    console.log("error: ", networkError);
     // e.g. server unreachable
-    //  throw {
-    //    error: `Network error: ${networkError.toString()}`,
-    //};
+    throw {
+      error: `Network error: ${networkError.toString()}`,
+    };
   }
 
   let body: Response;
   try {
     body = await response.json();
   } catch (convertError) {
-    console.log("error: ", convertError);
-    // throw {
-    //   error: `Response was not JSON: ${convertError.toString()}`,
-    // };
+    throw {
+      error: `Response was not JSON: ${convertError.toString()}`,
+    };
   }
 
   if (response.ok) {

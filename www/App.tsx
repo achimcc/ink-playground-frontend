@@ -30,7 +30,7 @@ function App() {
           <SplitterPanel size={70} className="overflow-hidden">
             <Editor />
           </SplitterPanel>
-          <SplitterPanel size={30}>
+          <SplitterPanel size={30} className="overflow-hidden">
             <Terminal />
           </SplitterPanel>
         </Splitter>
