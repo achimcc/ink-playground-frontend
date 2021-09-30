@@ -160,7 +160,15 @@ export const PlaygroundContextProvider = ({
             payload: {
               severity: "success",
               prompt: "Compiled: ",
-              text: (response as any).stdout,
+              text: (response as any).sterr,
+            },
+          });
+          dispatch({
+            type: "LOG_MESSAGE",
+            payload: {
+              severity: "success",
+              prompt: "Compiled: ",
+              text: "Use Download Button to obtain .target bundle",
             },
           });
           dispatch({

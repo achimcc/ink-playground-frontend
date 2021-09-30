@@ -48,6 +48,14 @@ const Editor: React.FC<Props> = ({}: Props) => {
       type: "SET_RA_LOADING",
       payload: false,
     });
+    dispatch({
+      type: "LOG_MESSAGE",
+      payload: {
+        severity: "success",
+        prompt: "System: ",
+        text: `Rust analyzer ready!`,
+      },
+    });
   }
 
   useEffect(() => {
