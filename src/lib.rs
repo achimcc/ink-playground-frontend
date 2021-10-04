@@ -1,7 +1,6 @@
-// #![cfg(target_arch = "wasm32")]
+#![cfg(target_arch = "wasm32")]
 #![allow(non_snake_case)]
 
-use std::sync::Arc;
 use change_json::ChangeJson;
 use ide::{
     Analysis, AnalysisHost, CompletionConfig, DiagnosticsConfig, FileId, FilePosition, FileRange,
@@ -15,6 +14,7 @@ use ide_db::helpers::{
     insert_use::{ImportGranularity, InsertUseConfig, PrefixKind},
     SnippetCap,
 };
+use std::sync::Arc;
 use syntax::TextRange;
 use wasm_bindgen::{prelude::*, JsValue};
 mod to_proto;
@@ -254,19 +254,20 @@ impl WorldState {
         };
 
         let mut res = vec![];
-        if include_declaration {
-            if let Some(r) = info.declaration {
-                let r = r.nav.focus_range.unwrap_or_else(|| r.nav.full_range);
-                res.push(Highlight { tag: None, range: to_proto::text_range(r, &line_index) });
+        for result in info {
+            if include_declaration {
+                if let Some(r) = result.declaration {
+                    let r = r.nav.focus_range.unwrap_or_else(|| r.nav.full_range);
+                    res.push(Highlight { tag: None, range: to_proto::text_range(r, &line_index) });
+                }
             }
+            result.references.iter().for_each(|(_id, ranges)| {
+                // FIXME: handle multiple files
+                for (r, _) in ranges {
+                    res.push(Highlight { tag: None, range: to_proto::text_range(*r, &line_index) });
+                }
+            });
         }
-        info.references.iter().for_each(|(_id, ranges)| {
-            // FIXME: handle multiple files
-            for (r, _) in ranges {
-                res.push(Highlight { tag: None, range: to_proto::text_range(*r, &line_index) });
-            }
-        });
-
         serde_wasm_bindgen::to_value(&res).unwrap()
     }
 
@@ -280,7 +281,7 @@ impl WorldState {
             Some(refs) => refs,
         };
 
-        let declaration = refs.declaration.unwrap();
+        let declaration = refs.first().unwrap().declaration.as_ref().unwrap();
         let range = to_proto::text_range(declaration.nav.full_range, &line_index);
         let text = declaration.nav.name.to_string();
 

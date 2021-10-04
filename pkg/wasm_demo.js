@@ -572,7 +572,7 @@ async function init(input, maybe_memory) {
         input = fetch(input);
     }
 
-    imports.wbg.memory = maybe_memory || new WebAssembly.Memory({initial:34,maximum:16384,shared:true});
+    imports.wbg.memory = maybe_memory || new WebAssembly.Memory({initial:35,maximum:16384,shared:true});
 
     const { instance, module } = await load(await input, imports);
 
