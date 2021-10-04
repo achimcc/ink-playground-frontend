@@ -1,4 +1,4 @@
-#![cfg(target_arch = "wasm32")]
+// #![cfg(target_arch = "wasm32")]
 #![allow(non_snake_case)]
 
 use std::sync::Arc;
