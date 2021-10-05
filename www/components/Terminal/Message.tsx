@@ -18,7 +18,7 @@ const TerminalMessage = ({ message: m }: Props) => {
         <span className={severityColors[m.severity]}>{m.prompt} &gt;</span>
         <p
           className="flex-1 typing items-center pl-2"
-          dangerouslySetInnerHTML={{ __html: m.text.toString() }}
+          dangerouslySetInnerHTML={{ __html: m?.text?.toString() }}
         />
       </div>
     </>

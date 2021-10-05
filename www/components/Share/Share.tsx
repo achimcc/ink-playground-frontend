@@ -6,9 +6,8 @@ import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 import { performGistSave } from "../../integration/integration";
 import { Divider } from "primereact/divider";
 import { Fieldset } from "primereact/fieldset";
-import { ShareIcon } from '@heroicons/react/solid'
+import { ShareIcon } from "@heroicons/react/solid";
 
-import { Card } from "primereact/card";
 import { PLAYGROUND_URL } from "../../config/constants";
 
 const Share = () => {
@@ -34,10 +33,8 @@ const Share = () => {
       type: "LOG_MESSAGE",
       payload: {
         severity: "info",
-        summary: "Creating Gist...",
-        detail: ``,
-        sticky: true,
-        closable: false,
+        prompt: "Creating Gist...",
+        text: ``,
       },
     });
     performGistSave(code)
@@ -49,10 +46,8 @@ const Share = () => {
           type: "LOG_MESSAGE",
           payload: {
             severity: "success",
-            detail: `Url to Gist: ${gistUrl} <br> \n Link to Playground: ${gistId}`,
-            summary: `Published`,
-            sticky: true,
-            closable: false,
+            text: `Url to Gist: ${gistUrl} <br> \n Link to Playground: ${PLAYGROUND_URL}/?id=${gistId}`,
+            prompt: `Gist published`,
           },
         });
         dispatch({
@@ -66,10 +61,8 @@ const Share = () => {
           type: "LOG_MESSAGE",
           payload: {
             severity: "error",
-            detail: `${error}`,
-            summary: `Communication Error`,
-            sticky: true,
-            closable: false,
+            text: `${error}`,
+            prompt: `Communication Error`,
           },
         });
         setLoading(false);
@@ -85,7 +78,7 @@ const Share = () => {
         aria-controls="overlay_panel"
         className="bg-primary text-primary text-xs border-0"
       >
-        <ShareIcon className="w-4 h-4 mr-2 text-primary"/>
+        <ShareIcon className="w-4 h-4 mr-2 text-primary" />
         Share
       </Button>
       <OverlayPanel
