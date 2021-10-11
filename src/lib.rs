@@ -143,6 +143,7 @@ impl WorldState {
                 group: true,
                 skip_glob_imports: true,
             },
+            snippets: Vec::new(),
         };
 
         log::warn!("completions");

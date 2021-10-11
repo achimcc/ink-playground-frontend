@@ -76,11 +76,7 @@ const Editor: React.FC<Props> = ({}: Props) => {
     editor.current?.updateOptions({ lineNumbers: isNumbering ? "on" : "off" });
   }, [isNumbering, editor]);
 
-  return (
-    <>
-      <div id="test" ref={assignRef} className="h-full" />
-    </>
-  );
+  return <div ref={assignRef} className="h-full" />;
 };
 
 export default Editor;
