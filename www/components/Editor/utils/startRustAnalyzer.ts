@@ -1,7 +1,9 @@
 import encoding from "text-encoding";
+import * as Comlink from "comlink";
+
+import { WorkerApi } from "../workers/worker";
 
 import { configureLanguage, setTokens } from "./configureLanguage";
-import { createRa } from "../workers/createRa";
 
 if (typeof TextEncoder === "undefined") {
   // Edge polyfill, https://rustwasm.github.io/docs/wasm-bindgen/reference/browser-support.html
@@ -29,7 +31,13 @@ export const startRustAnalyzer = async (monaco: any, model: any) => {
   monaco.languages.setLanguageConfiguration(modeId, rustConf.conf);
 
   // start rust-analyzer web worker
-  const state = await createRa();
+  // const state = await createRa();
+
+  const state = await Comlink.wrap<WorkerApi>(
+    new Worker(new URL("../workers/worker.ts", import.meta.url), {
+      type: "module",
+    })
+  ).handlers;
 
   const allTokens: Array<any> = [];
   monaco.languages.onLanguage(

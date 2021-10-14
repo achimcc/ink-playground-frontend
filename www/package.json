@@ -11,6 +11,7 @@
   "license": "(MIT OR Apache-2.0)",
   "dependencies": {
     "@heroicons/react": "^1.0.4",
+    "comlink": "^4.3.1",
     "isomorphic-fetch": "^3.0.0",
     "mini-css-extract-plugin": "0.11.3",
     "monaco-editor": "^0.25.2",

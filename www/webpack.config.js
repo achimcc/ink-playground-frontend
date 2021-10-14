@@ -8,7 +8,7 @@ module.exports = {
   mode: "production",
   entry: {
     app: "./index.tsx",
-    ra: "./components/Editor/workers/ra-worker.ts",
+    ra: "./components/Editor/workers/worker.ts",
   },
   module: {
     rules: [
@@ -45,7 +45,7 @@ module.exports = {
     filename: (chunkData) => {
       switch (chunkData.chunk.name) {
         case "ra":
-          return "ra-worker.ts";
+          return "worker.ts";
         default:
           return "bundle.[contenthash].js";
       }
