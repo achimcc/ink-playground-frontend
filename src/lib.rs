@@ -25,6 +25,7 @@ use return_types::*;
 extern crate web_sys;
 
 pub use wasm_bindgen_rayon::init_thread_pool;
+use rayon::prelude::*;
 
 fn derive_analytics(host: &AnalysisHost, file_id: FileId) -> JsValue {
     let analysis = host.analysis();
@@ -33,7 +34,7 @@ fn derive_analytics(host: &AnalysisHost, file_id: FileId) -> JsValue {
     let diagnostics: Vec<_> = analysis
         .diagnostics(&config, AssistResolveStrategy::None, file_id)
         .unwrap()
-        .into_iter()
+        .into_par_iter()
         .map(|d| {
             let Range { startLineNumber, startColumn, endLineNumber, endColumn } =
                 to_proto::text_range(d.range, &line_index);
@@ -50,7 +51,7 @@ fn derive_analytics(host: &AnalysisHost, file_id: FileId) -> JsValue {
     let highlights: Vec<_> = analysis
         .highlight(file_id)
         .unwrap()
-        .into_iter()
+        .into_par_iter()
         .map(|hl| Highlight {
             tag: Some(hl.highlight.tag.to_string()),
             range: to_proto::text_range(hl.range, &line_index),
@@ -225,7 +226,7 @@ impl WorldState {
 
                 let positions = nav_info
                     .info
-                    .iter()
+                    .par_iter()
                     .map(|target| target.focus_range.unwrap_or_else(|| target.full_range))
                     .map(|range| to_proto::text_range(range, &line_index))
                     .collect();
@@ -421,7 +422,7 @@ impl WorldState {
         let line_index = self.analysis.file_line_index(self.file_id).unwrap();
         if let Ok(folds) = self.analysis.folding_ranges(self.file_id) {
             let res: Vec<_> =
-                folds.into_iter().map(|fold| to_proto::folding_range(fold, &line_index)).collect();
+                folds.into_par_iter().map(|fold| to_proto::folding_range(fold, &line_index)).collect();
             serde_wasm_bindgen::to_value(&res).unwrap()
         } else {
             JsValue::NULL
